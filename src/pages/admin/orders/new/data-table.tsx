@@ -1,36 +1,33 @@
 import { useEffect, useState } from "react";
 import { Request } from "../../../../helpers/Request";
-import { OrdersType, PageWithOrders } from "../../../../types";
+import { Order } from "../../../../types";
 import { formatDate } from "../../../../helpers/date";
 import { formatUzbekPhoneNumber } from "../../../../helpers/phone";
-import { FaRegEye } from "react-icons/fa";
-import { CgArrowsExchangeAlt } from "react-icons/cg";
+import { FaRegCheckSquare, FaRegEye } from "react-icons/fa";
 import toast from "react-hot-toast";
-import ItemsModal from "./items-modal";
-import Pagination from "../../../../components/pagination";
+import ItemsModal from "../new/items-modal";
+import { MdOutlineCancelPresentation } from "react-icons/md";
 
 const DataTable = () => {
-  const [orders, setOrders] = useState<OrdersType[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [currentOrder, setCurrentOrder] = useState<null | OrdersType>(null);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [currentOrder, setCurrentOrder] = useState<null | Order>(null);
 
   useEffect(() => {
-    fetchNewOrders();
-  }, [currentPage]);
+    fetchProgressOrders();
+  }, []);
 
-  const fetchNewOrders = async () => {
+  const fetchProgressOrders = async () => {
     try {
       setLoading(true);
-      const { data } = await Request<PageWithOrders>(
-        `/order/new?page=${currentPage}`,
+      const { data } = await Request<Order[]>(
+        `/orders/status/IN_PROGRESS`,
         "GET"
       );
-      setTotalPages(data.totalPages);
-      setOrders(data.products);
+      console.log(data);
+
+      setOrders(data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -41,10 +38,20 @@ const DataTable = () => {
   const changeOrderToCompleted = async (id: string) => {
     try {
       setLoading(true);
-      await Request("/order/completed", "POST", {
-        orderId: id,
-      });
-      fetchNewOrders();
+      await Request(`/orders/${id}/status?status=COMPLETED`, "PATCH", {}, true);
+      fetchProgressOrders();
+      toast.success("Muvaffaqiyatli o'zgartirildi");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const changeOrderToCancel = async (id: string) => {
+    try {
+      setLoading(true);
+      await Request(`/orders/${id}/status?status=CANCELLED`, "PATCH", {}, true);
+      fetchProgressOrders();
       toast.success("Muvaffaqiyatli o'zgartirildi");
     } catch (error) {
       console.log(error);
@@ -53,7 +60,7 @@ const DataTable = () => {
     }
   };
 
-  const handleSeeDetail = (selectedOrder: OrdersType) => {
+  const handleSeeDetail = (selectedOrder: Order) => {
     setOpen(true);
     setCurrentOrder(selectedOrder);
   };
@@ -122,17 +129,17 @@ const DataTable = () => {
               className="bg-white transition-all duration-500 hover:bg-gray-50"
             >
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">
-                {order.id?.slice(0, 5)}
+                {order.orderId?.slice(0, 5)}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                {order.fullName}
+                {order.customerFullName}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                {formatUzbekPhoneNumber(order.phoneNumber)}
+                {formatUzbekPhoneNumber(order.customerPhoneNumber)}
               </td>
 
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                <div className="p-1 rounded-md flex justify-center items-center text-white bg-green-500 hover:bg-green-600 text-xs">
+                <div className="p-1 rounded-md flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600 text-xs">
                   NEW
                 </div>
               </td>
@@ -150,11 +157,19 @@ const DataTable = () => {
                   </button>
                   <button
                     disabled={loading}
-                    onClick={() => changeOrderToCompleted(order.id)}
+                    onClick={() => changeOrderToCompleted(order?.orderId)}
                     title="completedga o'tkazish"
                     className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-green-600 hover:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed"
                   >
-                    <CgArrowsExchangeAlt size={20} />
+                    <FaRegCheckSquare size={20} />
+                  </button>
+                  <button
+                    disabled={loading}
+                    onClick={() => changeOrderToCancel(order?.orderId)}
+                    title="bekor qilish"
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100 disabled:pointer-events-none disabled:cursor-not-allowed"
+                  >
+                    <MdOutlineCancelPresentation size={20} />
                   </button>
                 </div>
               </td>
@@ -164,18 +179,12 @@ const DataTable = () => {
       </table>
       <div>
         <ItemsModal
-          item={currentOrder!}
           handleClose={() => setOpen(false)}
+          item={currentOrder!}
           open={open}
         />
       </div>
-      <div className="flex justify-end mt-2">
-        <Pagination
-          currentPage={currentPage}
-          onPageChange={(page) => setCurrentPage(page)}
-          totalPages={totalPages}
-        />
-      </div>
+      <div className="flex justify-end mt-2"></div>
     </div>
   );
 };

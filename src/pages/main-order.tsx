@@ -66,14 +66,19 @@ const MainOrder = () => {
 
     try {
       setLoading(true);
-      await Request(`/orders`, "POST", {
-        products: cart.map((c) => ({
-          productId: c?.id,
-          amount: c?.quantity,
-        })),
-        customerPhoneNumber: phoneNumber,
-        customerFullName: shopName,
-      });
+      await Request(
+        `/orders`,
+        "POST",
+        {
+          products: cart.map((c) => ({
+            productId: c?.id,
+            amount: c?.quantity,
+          })),
+          customerPhoneNumber: phoneNumber,
+          customerFullName: shopName,
+        },
+        true
+      );
 
       toast.success(
         "Sizning buyurtmangiz qabul qilindi. Operator tez orada aloqaga chiqadi",

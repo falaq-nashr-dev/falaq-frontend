@@ -22,7 +22,7 @@ const AboutModal = ({ handleClose, open, about }: AboutModalProps) => {
                 aria-hidden
                 className="mx-auto w-12 h-1.5 rounded-full bg-gray-300 mb-6"
               />
-              <div className="min-h-[300px] max-h-[80vh] overflow-y-auto">
+              <div className="min-h-[300px] max-h-[80vh] overflow-y-auto text-justify">
                 {about}
               </div>
             </div>

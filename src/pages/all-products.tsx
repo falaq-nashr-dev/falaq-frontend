@@ -84,6 +84,7 @@ const AllProducts = () => {
             {state?.typeName ?? "Barcha mahsulotlar"}
           </h3>
           <div className="mt-6 space-y-2">
+            {products.length <= 0 && <p>Kitob topilmadi</p>}
             {loading
               ? Array.from({ length: 4 }, (_, index) => (
                   <ProductGridSkeleton key={index} />

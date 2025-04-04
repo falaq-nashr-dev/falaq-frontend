@@ -1,3 +1,4 @@
+import { formatUzbekPhoneNumber } from "../../../helpers/phone";
 import { User } from "../../../types";
 
 interface UsersTableProps {
@@ -26,7 +27,7 @@ const UsersTable = ({ data }: UsersTableProps) => {
               scope="col"
               className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"
             >
-              Phone
+              Phone Number
             </th>
             <th
               scope="col"
@@ -53,10 +54,10 @@ const UsersTable = ({ data }: UsersTableProps) => {
                 {ind + 1}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                {user.firstName + " " + user.lastName}
+                {user?.firstName + " " + user?.lastName}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                {user.phoneNumber}
+                {formatUzbekPhoneNumber(user?.phoneNumber)}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
                 {user.birthYear}

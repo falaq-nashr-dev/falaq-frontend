@@ -1,5 +1,4 @@
 import Header from "./components/header";
-
 import { LuShoppingCart } from "react-icons/lu";
 import { useCartStore } from "../store/useCartStore";
 import { useEffect, useState } from "react";
@@ -22,24 +21,27 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // modals
+  // modal states
   const [aboutOpen, setAboutOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [demoOpen, setDemoOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
 
-  const [currentProduct, setCurrentProduct] = useState<null | AdminBooks>(null);
-
+  const [currentProduct, setCurrentProduct] = useState<AdminBooks | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
 
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!params.id) {
+      navigate("/");
+      return;
+    }
     fetchCurrentBook();
     fetchCurrentBookReviews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [params.id, navigate]);
 
   const fetchCurrentBook = async () => {
     try {
@@ -48,16 +50,44 @@ const ProductDetail = () => {
         `/products/${params.id}`,
         "GET"
       );
-      if (data === null) {
+      if (!data) {
         navigate("/");
         return;
       }
       setCurrentProduct(data);
+      // Reset quantity when a new product is loaded
+      setQuantity(1);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching product:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchCurrentBookReviews = async () => {
+    if (!params.id) return;
+    try {
+      const { data } = await Request<Review[]>(
+        `/product-rating/product/${params.id}`,
+        "GET",
+        {},
+        true
+      );
+      setReviews(data);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  const changeQuantity = (delta: number) => {
+    setQuantity((prev) => {
+      let newQuantity = prev + delta;
+      if (newQuantity < 1) newQuantity = 1;
+      if (currentProduct && newQuantity > currentProduct.quantity) {
+        newQuantity = currentProduct.quantity;
+      }
+      return newQuantity;
+    });
   };
 
   const handleAddToCart = () => {
@@ -65,22 +95,12 @@ const ProductDetail = () => {
       toast.error("Mahsulot topilmadi!");
       return;
     }
-    addToCart(currentProduct!, quantity);
-    toast.success("Savatga qo'shildi");
-  };
-
-  const fetchCurrentBookReviews = async () => {
-    try {
-      const { data } = await Request<Review[]>(
-        `/product-rating/product/${params?.id}`,
-        "GET",
-        {},
-        true
-      );
-      setReviews(data);
-    } catch (error) {
-      console.log(typeof error);
+    if (currentProduct.quantity < quantity) {
+      toast.error("Sotuvdagi mahsulot yetarli emas!");
+      return;
     }
+    addToCart(currentProduct, quantity);
+    toast.success("Savatga qo'shildi");
   };
 
   return (
@@ -101,33 +121,35 @@ const ProductDetail = () => {
                       )
                     : "new.png"
                 }
-                alt={currentProduct?.name}
+                alt={currentProduct?.name || "Product Image"}
                 className="mx-auto w-[200px]"
               />
               <h4 className="font-semibold text-xl mt-3 text-center">
                 {currentProduct?.name}
               </h4>
               <p className="text-gray-600 text-center mt-[4px]">
-                {currentProduct?.author?.fullName}
+                {currentProduct?.author.fullName}
               </p>
               <p className="text-center text-xl mt-4 font-bold">
-                {currentProduct?.salePrice?.toLocaleString()} so’m
+                {currentProduct && currentProduct.quantity === 0
+                  ? "Sotuvda yo'q"
+                  : currentProduct?.salePrice?.toLocaleString() + " so’m"}
               </p>
             </div>
             <div className="mt-6">
-              <div className="flex items-center gap-x-3  justify-between ">
-                <div className="flex items-center  gap-x-3">
+              <div className="flex items-center gap-x-3 justify-between">
+                <div className="flex items-center gap-x-3">
                   <button
                     disabled={quantity <= 10}
-                    onClick={() => setQuantity(quantity - 10)}
-                    className="p-2 flex justify-center items-center  w-[66px] h-[49px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
+                    onClick={() => changeQuantity(-10)}
+                    className="p-2 flex justify-center items-center w-[66px] h-[49px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
                   >
                     -10
                   </button>
                   <button
                     disabled={quantity <= 1}
-                    onClick={() => setQuantity(quantity - 1)}
-                    className="p-2 flex justify-center items-center  w-[56px] h-[48px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
+                    onClick={() => changeQuantity(-1)}
+                    className="p-2 flex justify-center items-center w-[56px] h-[48px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
                   >
                     -1
                   </button>
@@ -138,34 +160,51 @@ const ProductDetail = () => {
                 </p>
                 <div className="flex items-center gap-x-3">
                   <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="p-2 flex justify-center items-center  w-[56px] h-[48px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
+                    onClick={() => changeQuantity(1)}
+                    disabled={
+                      currentProduct
+                        ? quantity >= currentProduct.quantity
+                        : false
+                    }
+                    className="p-2 flex justify-center items-center w-[56px] h-[48px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
                   >
                     +1
                   </button>
                   <button
-                    onClick={() => setQuantity(quantity + 10)}
-                    className="p-2 flex justify-center items-center  w-[66px] h-[49px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
+                    onClick={() => changeQuantity(10)}
+                    disabled={
+                      currentProduct
+                        ? quantity + 10 > currentProduct.quantity
+                        : false
+                    }
+                    className="p-2 flex justify-center items-center w-[66px] h-[49px] hover:bg-gray-200 rounded-md bg-gray-100 disabled:opacity-60 disabled:hover:bg-gray-100 text-lg font-medium"
                   >
                     +10
                   </button>
                 </div>
               </div>
 
-              {/* add to cart button */}
+              {/* Add-to-cart button */}
               <button
-                onClick={() => handleAddToCart()}
-                className={`text-white group bg-[#2473F2] focus:ring-1 focus:outline-none focus:ring-blue-300  rounded-lg  px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-5 w-full`}
+                disabled={
+                  !currentProduct ||
+                  currentProduct.quantity === 0 ||
+                  (currentProduct && quantity > currentProduct.quantity)
+                }
+                onClick={handleAddToCart}
+                className="text-white group bg-[#2473F2] focus:ring-1 focus:outline-none focus:ring-blue-300 rounded-lg px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-5 w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:opacity-50"
               >
                 <LuShoppingCart className="size-5" />
                 <span className="mt-[2px]">
-                  {currentProduct?.salePrice?.toLocaleString()} so’m
+                  {currentProduct && currentProduct.quantity === 0
+                    ? "Sotuvda yo'q"
+                    : currentProduct?.salePrice?.toLocaleString() + " so’m"}
                 </span>
               </button>
-              {/* about book */}
+              {/* About book */}
               <button
                 onClick={() => setAboutOpen(true)}
-                className={` group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300  rounded-lg  px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-5 w-full`}
+                className="group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300 rounded-lg px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-5 w-full"
               >
                 Kitob haqida
               </button>
@@ -176,19 +215,19 @@ const ProductDetail = () => {
             <div>
               <button
                 onClick={() => setMoreOpen(true)}
-                className={`group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300  rounded-lg  px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-3 w-full`}
+                className="group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300 rounded-lg px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-3 w-full"
               >
                 Batafsil
               </button>
               <button
                 onClick={() => setDemoOpen(true)}
-                className={` group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300  rounded-lg  px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-4 w-full`}
+                className="group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300 rounded-lg px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-4 w-full"
               >
                 Demo
               </button>
               <button
                 onClick={() => setReviewOpen(true)}
-                className={` group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300  rounded-lg  px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-4 w-full`}
+                className="group bg-[#EFEEF0] focus:ring-1 focus:outline-none focus:ring-blue-300 rounded-lg px-[16px] py-[9px] text-center relative overflow-hidden hover:opacity-80 flex items-center gap-x-2 text-lg justify-center mt-4 w-full"
               >
                 Izoh qoldirish
               </button>
@@ -203,12 +242,9 @@ const ProductDetail = () => {
                           className="w-[40px] h-[40px]"
                         />
                       </div>
-
                       <div>
                         <div className="flex items-center gap-x-1">
-                          <span
-                            className={`cursor-pointer text-2xl text-yellow-400`}
-                          >
+                          <span className="cursor-pointer text-2xl text-yellow-400">
                             ★
                           </span>
                           <p className="mt-1">{review.rating}</p>
@@ -237,12 +273,12 @@ const ProductDetail = () => {
           open={moreOpen}
         />
         <DemoModal
-          currentBookId={params?.id ?? ""}
+          currentBookId={params.id || ""}
           handleClose={() => setDemoOpen(false)}
           open={demoOpen}
         />
         <ReviewModal
-          currentBookId={params?.id ?? ""}
+          currentBookId={params.id || ""}
           handleClose={() => setReviewOpen(false)}
           open={reviewOpen}
           refresh={fetchCurrentBookReviews}
