@@ -38,7 +38,7 @@ const Product = ({ book }: { book: HomeBook }) => {
         </div>
         <div className="flex items-center justify-between mt-1">
           <p className="font-semibold text-[15px] text-[#0E1A23]">
-            {book.price?.toLocaleString() || "0"} so’m
+            {book.salePrice?.toLocaleString() || "0"} so’m
           </p>
         </div>
       </div>

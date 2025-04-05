@@ -13,7 +13,7 @@ const Profile = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
-    navigate("/start");
+    navigate("/sign-in");
   };
 
   return (

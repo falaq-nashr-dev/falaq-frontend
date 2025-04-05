@@ -45,6 +45,7 @@ const App = () => {
       "/product/*",
       "/profile/settings",
       "/all-products",
+      "/main",
     ],
     []
   );

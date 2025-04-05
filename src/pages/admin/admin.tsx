@@ -23,14 +23,15 @@ const adminRoutes = [
   },
   {
     icon: TbCategory2,
-    label: "Kategoriyalar",
-    href: "/admin/categories",
-  },
-  {
-    icon: TbCategory2,
     label: "Kitob sahifalar",
     href: "/admin/book-pages",
   },
+  {
+    icon: TbCategory2,
+    label: "Kategoriyalar",
+    href: "/admin/categories",
+  },
+
   {
     icon: VscTypeHierarchySuper,
     label: "Turlar",

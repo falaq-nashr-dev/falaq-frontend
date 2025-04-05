@@ -1,5 +1,5 @@
 import { FiHome, FiSearch, FiUser } from "react-icons/fi";
-import logo from "../../public/new-logo.png";
+import logo from "../../public/brand-logo.png";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/useCartStore";
@@ -29,7 +29,7 @@ const BottomNavigation = () => {
         onClick={() => navigate("/main")}
         className="text-center flex justify-center items-center cursor-pointer"
       >
-        <img src={logo} alt="logo" />
+        <img width={45} src={logo} alt="logo" />
       </div>
       <div
         onClick={() => navigate("/cart")}

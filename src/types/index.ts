@@ -188,7 +188,10 @@ export type BookWithType = {
 
 export type Review = {
   id: string;
-  fullName: string;
+  userFullName: string;
+  product: {
+    rating: number;
+  };
   rating: number;
   review: string;
 };

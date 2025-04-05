@@ -249,7 +249,7 @@ const ProductDetail = () => {
                           </span>
                           <p className="mt-1">{review.rating}</p>
                         </div>
-                        <h3>{review.fullName}</h3>
+                        <h3>{review.userFullName}</h3>
                       </div>
                     </div>
                     <div className="mt-2">{review.review}</div>
