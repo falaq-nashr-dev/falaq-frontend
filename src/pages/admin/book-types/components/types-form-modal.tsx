@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Drawer } from "vaul";
 import { Request } from "../../../../helpers/Request";
 import toast from "react-hot-toast";
+import { useBookTypesStore } from "../../../../store/admin/useBookTypesStore";
 
 interface TypesFormModalProps {
   open: boolean;
@@ -15,13 +16,14 @@ const TypesFormModal = ({
   refresh,
 }: TypesFormModalProps) => {
   //
-  const [name, setName] = useState("");
+  const { editingId, setEditingId, name, setName } = useBookTypesStore();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClear = () => {
     handleClose();
     setName("");
+    setEditingId("");
   };
 
   const handleSave = async () => {
@@ -30,16 +32,14 @@ const TypesFormModal = ({
       inputRef.current?.focus();
       return;
     }
+    setLoading(true);
+
+    const isEditing = editingId !== "";
+    const endpoint = isEditing ? `/product-type/${editingId}` : "/product-type";
+    const method = isEditing ? "PUT" : "POST";
+
     try {
-      setLoading(true);
-      await Request(
-        "/product-type",
-        "POST",
-        {
-          name,
-        },
-        true
-      );
+      await Request(endpoint, method, { name }, true);
       handleClear();
       refresh();
     } catch (error) {

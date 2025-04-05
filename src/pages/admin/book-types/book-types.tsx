@@ -3,9 +3,10 @@ import { BookType } from "../../../types";
 import { useCallback, useEffect, useState } from "react";
 import BookTypesData from "./components/book-types-data";
 import TypesFormModal from "./components/types-form-modal";
+import { useBookTypesStore } from "../../../store/admin/useBookTypesStore";
 
 const BookTypes = () => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useBookTypesStore();
   const [bookTypes, setBookTypes] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
 
