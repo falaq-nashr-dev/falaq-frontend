@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 import { ImageViewer } from "react-image-viewer-dv";
 import { getImage } from "../../../helpers/image";
+import { MdModeEdit } from "react-icons/md";
 
 const BooksTable = () => {
   const [books, setBooks] = useState<AdminBooks[]>([]);
@@ -177,6 +178,12 @@ const BooksTable = () => {
                     className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100"
                   >
                     <AiOutlineClose size={20} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(book.id)}
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-blue-600 hover:bg-gray-100"
+                  >
+                    <MdModeEdit size={20} />
                   </button>
                 </div>
               </td>

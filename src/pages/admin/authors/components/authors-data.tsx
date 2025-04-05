@@ -2,6 +2,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Author } from "../../../../types";
 import toast from "react-hot-toast";
 import { Request } from "../../../../helpers/Request";
+import { MdModeEdit } from "react-icons/md";
+import { useAuthorStore } from "../../../../store/admin/useAuthorStore";
 interface AuthorsDataProps {
   authors: Author[];
   loading: boolean;
@@ -9,6 +11,7 @@ interface AuthorsDataProps {
 }
 const AuthorsData = ({ authors, loading, refresh }: AuthorsDataProps) => {
   //
+  const { setEditingId, setOpen, setDefinition, setName } = useAuthorStore();
 
   const handleDelete = async (authorId: string) => {
     try {
@@ -18,6 +21,13 @@ const AuthorsData = ({ authors, loading, refresh }: AuthorsDataProps) => {
       console.log(typeof error);
       toast.error("Xatolik yuz berdi");
     }
+  };
+
+  const handleEdit = async (author: Author) => {
+    setEditingId(author.id);
+    setOpen(true);
+    setName(author.fullName);
+    setDefinition(author.definition);
   };
 
   return (
@@ -93,6 +103,12 @@ const AuthorsData = ({ authors, loading, refresh }: AuthorsDataProps) => {
                     className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100"
                   >
                     <AiOutlineClose size={20} />
+                  </button>
+                  <button
+                    onClick={() => handleEdit(author)}
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-blue-600 hover:bg-gray-100"
+                  >
+                    <MdModeEdit size={20} />
                   </button>
                 </div>
               </td>

@@ -3,13 +3,14 @@ import AuthorsData from "./components/authors-data";
 import { Author } from "../../../types";
 import { Request } from "../../../helpers/Request";
 import AuthorsFormModal from "./components/authors-form-modal";
+import { useAuthorStore } from "../../../store/admin/useAuthorStore";
 
 const Authors = () => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useAuthorStore();
+  // const [open, setOpen] = useState(false);
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch authors on search change or pagination
   useEffect(() => {
     fetchAuthors();
   }, []);

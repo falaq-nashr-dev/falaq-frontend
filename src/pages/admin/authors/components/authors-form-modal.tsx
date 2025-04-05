@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Drawer } from "vaul";
 import { Request } from "../../../../helpers/Request";
 import toast from "react-hot-toast";
+import { useAuthorStore } from "../../../../store/admin/useAuthorStore";
 
 interface AuthorsFormModalProps {
   open: boolean;
@@ -15,36 +16,42 @@ const AuthorsFormModal = ({
   refresh,
 }: AuthorsFormModalProps) => {
   //
-  const [name, setName] = useState("");
-  const [definition, setDefinition] = useState("");
+  const { definition, name, setDefinition, setName, setEditingId, editingId } =
+    useAuthorStore();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClear = () => {
     handleClose();
+    setName("");
+    setDefinition("");
+    setEditingId("");
   };
 
   const handleSave = async () => {
-    if (!name || !definition) {
+    if (!name.trim() || !definition.trim()) {
       toast.error("Bo'sh maydonlarni kiriting");
       inputRef.current?.focus();
       return;
     }
+
+    setLoading(true);
+    const isEditing = Boolean(editingId);
+    const endpoint = isEditing ? `/authors/${editingId}` : "/authors";
+    const method = isEditing ? "PUT" : "POST";
+    const payload = {
+      fullName: name,
+      definition,
+      ...(isEditing && { id: editingId }),
+    };
+
     try {
-      setLoading(true);
-      await Request(
-        "/authors",
-        "POST",
-        {
-          fullName: name,
-          definition,
-        },
-        true
-      );
-      handleClose();
+      await Request(endpoint, method, payload, true);
+      if (isEditing) setEditingId("");
+      handleClear();
       refresh();
     } catch (error) {
-      console.log(error);
+      console.log(typeof error);
     } finally {
       setLoading(false);
     }

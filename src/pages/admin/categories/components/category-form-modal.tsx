@@ -21,10 +21,11 @@ const CategoryFormModal = ({
 
   const handleClear = () => {
     handleClose();
+    setName("");
   };
 
   const handleSave = async () => {
-    if (!name) {
+    if (!name.trim()) {
       toast.error("Bo'sh maydonni kiriting");
       inputRef.current?.focus();
       return;
@@ -39,7 +40,7 @@ const CategoryFormModal = ({
         },
         true
       );
-      handleClose();
+      handleClear();
       refresh();
     } catch (error) {
       console.log(error);
