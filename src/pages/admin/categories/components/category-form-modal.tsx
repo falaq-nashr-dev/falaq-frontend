@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Drawer } from "vaul";
 import { Request } from "../../../../helpers/Request";
 import toast from "react-hot-toast";
+import { useCategoryStore } from "../../../../store/admin/useCategoryStore";
 
 interface CategoryFormModalProps {
   open: boolean;
@@ -15,13 +16,14 @@ const CategoryFormModal = ({
   refresh,
 }: CategoryFormModalProps) => {
   //
-  const [name, setName] = useState("");
+  const { setEditingId, name, setName, editingId } = useCategoryStore();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClear = () => {
     handleClose();
     setName("");
+    setEditingId("");
   };
 
   const handleSave = async () => {
@@ -30,16 +32,16 @@ const CategoryFormModal = ({
       inputRef.current?.focus();
       return;
     }
+
+    setLoading(true);
+    const isEditing = editingId !== "";
+    const endpoint = isEditing
+      ? `/product-category/${editingId}`
+      : "/product-category";
+    const method = isEditing ? "PUT" : "POST";
+
     try {
-      setLoading(true);
-      await Request(
-        "/product-category",
-        "POST",
-        {
-          name,
-        },
-        true
-      );
+      await Request(endpoint, method, { name }, true);
       handleClear();
       refresh();
     } catch (error) {

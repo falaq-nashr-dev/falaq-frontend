@@ -1,11 +1,12 @@
 import { Request } from "../../../helpers/Request";
+import { useCategoryStore } from "../../../store/admin/useCategoryStore";
 import { BookCategory } from "../../../types";
 import CategoryData from "./components/category-data";
 import CategoryFormModal from "./components/category-form-modal";
 import { useCallback, useEffect, useState } from "react";
 
 const Categories = () => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useCategoryStore();
   const [categories, setCategories] = useState<BookCategory[]>([]);
   const [loading, setLoading] = useState(true);
 
