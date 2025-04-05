@@ -7,12 +7,15 @@ import { AiOutlineClose } from "react-icons/ai";
 import BookPagesModal from "./book-pages-modal";
 import toast from "react-hot-toast";
 import { IoChevronBack } from "react-icons/io5";
+import { MdModeEdit } from "react-icons/md";
+import { useBookPagesStore } from "../../../../store/admin/useBookPagesStore";
 
 const OneBookPageData = () => {
   //
+  const { setEditingId, open, setOpen, setContent, setPageNumber } =
+    useBookPagesStore();
   const params = useParams();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
 
   const [bookPages, setBookPages] = useState<BookPage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -38,11 +41,11 @@ const OneBookPageData = () => {
     }
   };
 
-  const [content, setContent] = useState("");
+  const [currentContent, setCurrentContent] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const showContent = (content: string) => {
-    setContent(content);
+    setCurrentContent(content);
     setIsOpen(true);
   };
 
@@ -54,6 +57,13 @@ const OneBookPageData = () => {
       console.log(typeof error);
       toast.error("Xatolik yuz berdi");
     }
+  };
+
+  const handleEdit = (bookPage: BookPage) => {
+    setEditingId(bookPage.id);
+    setContent(bookPage.content);
+    setPageNumber(bookPage.pageNumber + "");
+    setOpen(true);
   };
 
   return (
@@ -172,6 +182,12 @@ const OneBookPageData = () => {
                   >
                     <AiOutlineClose size={20} />
                   </button>
+                  <button
+                    onClick={() => handleEdit(bookPage)}
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-blue-600 hover:bg-gray-100"
+                  >
+                    <MdModeEdit size={20} />
+                  </button>
                 </div>
               </td>
             </tr>
@@ -180,7 +196,7 @@ const OneBookPageData = () => {
       </table>
       <div>
         <ContentModal
-          content={content}
+          content={currentContent}
           handleClose={() => setIsOpen(false)}
           open={isOpen}
         />

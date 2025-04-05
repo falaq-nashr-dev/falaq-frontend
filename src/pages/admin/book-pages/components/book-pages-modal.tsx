@@ -3,6 +3,7 @@ import { Drawer } from "vaul";
 import { Request } from "../../../../helpers/Request";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { useBookPagesStore } from "../../../../store/admin/useBookPagesStore";
 
 interface BookPagesModalProps {
   open: boolean;
@@ -15,9 +16,14 @@ const BookPagesModal = ({
   open,
   refresh,
 }: BookPagesModalProps) => {
-  //
-  const [content, setContent] = useState("");
-  const [pageNumber, setPageNumber] = useState("");
+  const {
+    content,
+    setContent,
+    editingId,
+    setEditingId,
+    pageNumber,
+    setPageNumber,
+  } = useBookPagesStore();
   const [loading, setLoading] = useState(false);
   const params = useParams();
 
@@ -25,25 +31,27 @@ const BookPagesModal = ({
     handleClose();
     setContent("");
     setPageNumber("");
+    setEditingId("");
   };
 
   const handleSave = async () => {
-    if (!content || !pageNumber || !params?.id) {
+    if (!content.trim() || !pageNumber || !params?.id) {
       toast.error("Bo'sh maydonlarni kiriting");
       return;
     }
+
+    setLoading(true);
+    const isEditing = editingId !== "";
+    const endpoint = isEditing ? `/book-pages/${editingId}` : "/book-pages";
+    const method = isEditing ? "PUT" : "POST";
+    const payload = {
+      bookId: params?.id,
+      pageNumber: parseInt(pageNumber),
+      content,
+    };
+
     try {
-      setLoading(true);
-      await Request(
-        "/book-pages",
-        "POST",
-        {
-          bookId: params?.id,
-          pageNumber: parseInt(pageNumber),
-          content,
-        },
-        true
-      );
+      await Request(endpoint, method, payload, true);
       handleClear();
       refresh();
     } catch (error) {
