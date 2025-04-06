@@ -1,7 +1,4 @@
-import { AiOutlineClose } from "react-icons/ai";
 import { Author } from "../../../../types";
-import toast from "react-hot-toast";
-import { Request } from "../../../../helpers/Request";
 import { MdModeEdit } from "react-icons/md";
 import { useAuthorStore } from "../../../../store/admin/useAuthorStore";
 interface AuthorsDataProps {
@@ -9,19 +6,19 @@ interface AuthorsDataProps {
   loading: boolean;
   refresh: () => Promise<void>;
 }
-const AuthorsData = ({ authors, loading, refresh }: AuthorsDataProps) => {
+const AuthorsData = ({ authors, loading }: AuthorsDataProps) => {
   //
   const { setEditingId, setOpen, setDefinition, setName } = useAuthorStore();
 
-  const handleDelete = async (authorId: string) => {
-    try {
-      await Request(`/authors/${authorId}`, "DELETE", {}, true);
-      refresh();
-    } catch (error) {
-      console.log(typeof error);
-      toast.error("Xatolik yuz berdi");
-    }
-  };
+  // const handleDelete = async (authorId: string) => {
+  //   try {
+  //     await Request(`/authors/${authorId}`, "DELETE", {}, true);
+  //     refresh();
+  //   } catch (error) {
+  //     console.log(typeof error);
+  //     toast.error("Xatolik yuz berdi");
+  //   }
+  // };
 
   const handleEdit = async (author: Author) => {
     setEditingId(author.id);
@@ -98,12 +95,6 @@ const AuthorsData = ({ authors, loading, refresh }: AuthorsDataProps) => {
 
               <td className=" p-5 ">
                 <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleDelete(author.id)}
-                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100"
-                  >
-                    <AiOutlineClose size={20} />
-                  </button>
                   <button
                     onClick={() => handleEdit(author)}
                     className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-blue-600 hover:bg-gray-100"

@@ -14,6 +14,13 @@ const DataTable = () => {
 
   useEffect(() => {
     fetchCompletedOrders();
+
+    const intervalId = setInterval(() => {
+      fetchCompletedOrders();
+    }, 30000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchCompletedOrders = async () => {

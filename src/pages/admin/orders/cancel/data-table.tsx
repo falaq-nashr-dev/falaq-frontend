@@ -14,6 +14,13 @@ const DataTable = () => {
 
   useEffect(() => {
     fetchCanceledOrders();
+
+    const intervalId = setInterval(() => {
+      fetchCanceledOrders();
+    }, 30000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchCanceledOrders = async () => {

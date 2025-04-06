@@ -16,6 +16,13 @@ const DataTable = () => {
 
   useEffect(() => {
     fetchProgressOrders();
+
+    const intervalId = setInterval(() => {
+      fetchProgressOrders();
+    }, 30000); // 30,000 milliseconds = 30 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchProgressOrders = async () => {
@@ -47,6 +54,7 @@ const DataTable = () => {
       setLoading(false);
     }
   };
+
   const changeOrderToCancel = async (id: string) => {
     try {
       setLoading(true);

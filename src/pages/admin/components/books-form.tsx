@@ -1,12 +1,16 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BASE_URL, Request } from "../../../helpers/Request";
 import { Author, BookCategory, BookType } from "../../../types";
 import axios from "axios";
+import { useBookStore } from "../../../store/admin/useBookStore";
+import { parseInt } from "lodash";
 
 const BooksForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { editingId, setEditingId } = useBookStore();
   const [image, setImage] = useState<null | File>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,9 +30,31 @@ const BooksForm = () => {
   const stockCountRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files || event.target.files.length === 0) {
+      return;
+    }
     setImageUrl(URL.createObjectURL(event.target.files![0]));
     setImage(event.target.files![0]);
   };
+
+  useEffect(() => {
+    if (
+      location.state &&
+      authors.length > 0 &&
+      categories.length > 0 &&
+      bookTypes.length > 0
+    ) {
+      nameRef.current!.value = location.state.name;
+      authorRef.current!.value = location.state.author.id;
+      categoryRef.current!.value = location.state.productCategory.id;
+      typeRef.current!.value = location.state.productType.id;
+      priceRef.current!.value = location.state.price + "";
+      salePriceRef.current!.value = location.state.salePrice + "";
+      descriptionRef.current!.value = location.state.description;
+      aboutRef.current!.value = location.state.about;
+      stockCountRef.current!.value = location.state.quantity + "";
+    }
+  }, [location, authors, categories, bookTypes]);
 
   const handleSave = async () => {
     const name = nameRef.current?.value || "";
@@ -53,14 +79,14 @@ const BooksForm = () => {
       description === "" ||
       about === "" ||
       stockCount === 0 ||
-      image == null
+      (!editingId && !image)
     ) {
       toast.error("Iltimos to'liq ma'lumotlarni kiriting.");
       return;
     }
     try {
       const formData = new FormData();
-      formData.append("photo", image);
+      formData.append("photo", image!);
       formData.append("name", name);
       formData.append("productTypeId", type);
       formData.append("productCategoryId", category);
@@ -70,19 +96,41 @@ const BooksForm = () => {
       formData.append("quantity", stockCount + "");
       formData.append("description", description);
       formData.append("about", about);
-
-      await axios.post(BASE_URL + "/products/add", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
       setLoading(true);
+
+      if (editingId === "") {
+        await axios.post(BASE_URL + "/products/add", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        await axios.put(
+          BASE_URL + `/products/${editingId}`,
+          {
+            name,
+            productTypeId: type,
+            productCategoryId: category,
+            authorId: author,
+            price,
+            salePrice,
+            quantity: stockCount,
+            description,
+            about,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+      setEditingId("");
       toast.success("Muvaffaqiyatli");
       navigate("/admin/books");
     } catch (error) {
-      console.log(error);
+      console.log(typeof error);
       toast.error("Xatolik yuz berdi");
     } finally {
       setLoading(false);
@@ -213,9 +261,12 @@ const BooksForm = () => {
           <select
             ref={authorRef}
             id="author"
+            defaultValue={""}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 focus:outline-blue-500"
           >
-            <option selected>Muallifni tanlang</option>
+            <option value="" disabled>
+              Muallifni tanlang
+            </option>
             {authors.map((author) => (
               <option key={author.id} value={author.id}>
                 {author.fullName}
@@ -259,9 +310,10 @@ const BooksForm = () => {
           <select
             ref={typeRef}
             id="type"
+            defaultValue={""}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 focus:outline-blue-500"
           >
-            <option selected value={""}>
+            <option value="" disabled>
               Turni tanlang
             </option>
             {bookTypes.map((item) => (
@@ -278,10 +330,11 @@ const BooksForm = () => {
           </label>
           <select
             ref={categoryRef}
+            defaultValue={""}
             id="category"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 focus:outline-blue-500"
           >
-            <option value={""} selected>
+            <option value="" disabled>
               Kategoriya tanlang
             </option>
             {categories.map((item) => (
