@@ -32,7 +32,7 @@ const BottomCartNavigation = ({
       }  navigation-shadow fixed bottom-0 w-full  bg-white rounded-t-[24px]`}
     >
       {cart.length > 0 && (
-        <div className="container px-[24px] mb-1  py-[20px]  mx-auto max-w-xl flex justify-between items-center">
+        <div className="container px-[24px] mb-1 py-[20px]  mx-auto max-w-xl flex justify-between items-center">
           <div>
             <p className="text-gray-600">{cart?.length ?? 0} xil kitob</p>
             <h1 className="text-[#162B4C] font-semibold text-lg">
@@ -50,7 +50,7 @@ const BottomCartNavigation = ({
 
       <div className="flex items-center justify-between px-5">
         <div
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/main")}
           className="text-center flex flex-col items-center cursor-pointer"
         >
           <FiHome className="size-5 font-medium" />
@@ -65,7 +65,7 @@ const BottomCartNavigation = ({
         </div>
         {/* logo */}
         <div
-          onClick={() => navigate("/main")}
+          onClick={() => navigate("/")}
           className="text-center flex justify-center items-center cursor-pointer"
         >
           <img width={45} src={logo} alt="logo" />

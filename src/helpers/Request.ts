@@ -1,23 +1,6 @@
-// import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-
-// export const BASE_URL = "http://localhost:8080";
-
-// export function Request<T = unknown>(
-//   url: string,
-//   method: AxiosRequestConfig["method"],
-//   data?: unknown,
-//   isSendHeaderAuthorization: boolean = false
-// ): Promise<AxiosResponse<T>> {
-//   return axios({
-//     baseURL: BASE_URL,
-//     url,
-//     method,
-//     data,
-//   });
-// }
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-export const BASE_URL = "http://localhost:8080";
+export const BASE_URL = "";
 
 export function Request<T = unknown>(
   url: string,

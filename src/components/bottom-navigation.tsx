@@ -11,7 +11,7 @@ const BottomNavigation = () => {
   return (
     <div className="h-[80px] navigation-shadow fixed bottom-0 w-full  bg-white rounded-t-[24px] flex items-center justify-between px-5">
       <div
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/main")}
         className="text-center flex flex-col items-center cursor-pointer"
       >
         <FiHome className="size-5 font-medium" />
@@ -26,7 +26,7 @@ const BottomNavigation = () => {
       </div>
       {/* logo */}
       <div
-        onClick={() => navigate("/main")}
+        onClick={() => navigate("/")}
         className="text-center flex justify-center items-center cursor-pointer"
       >
         <img width={45} src={logo} alt="logo" />
