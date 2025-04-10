@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-export const BASE_URL = "";
+export const BASE_URL = "https://falaqnashr.uz/api/";
 
 export function Request<T = unknown>(
   url: string,
