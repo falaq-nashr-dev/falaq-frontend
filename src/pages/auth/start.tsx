@@ -24,6 +24,8 @@ const StartPage = () => {
   };
 
   const handleRegister = async () => {
+    console.log(typeof isFocus);
+
     try {
       const { data } = await Request("/auth/register", "POST", {
         firstName: name,
