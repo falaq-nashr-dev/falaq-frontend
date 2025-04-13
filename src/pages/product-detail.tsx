@@ -33,6 +33,11 @@ const ProductDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
 
+  // Scroll to top when the page opens
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     if (!params.id) {
       navigate("/");
