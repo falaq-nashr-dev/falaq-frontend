@@ -1,24 +1,30 @@
 import { Author } from "../../../../types";
 import { MdModeEdit } from "react-icons/md";
 import { useAuthorStore } from "../../../../store/admin/useAuthorStore";
+import { Request } from "../../../../helpers/Request";
+import toast from "react-hot-toast";
+import { IoMdClose } from "react-icons/io";
 interface AuthorsDataProps {
   authors: Author[];
   loading: boolean;
   refresh: () => Promise<void>;
 }
-const AuthorsData = ({ authors, loading }: AuthorsDataProps) => {
+const AuthorsData = ({ authors, loading, refresh }: AuthorsDataProps) => {
   //
   const { setEditingId, setOpen, setDefinition, setName } = useAuthorStore();
 
-  // const handleDelete = async (authorId: string) => {
-  //   try {
-  //     await Request(`/authors/${authorId}`, "DELETE", {}, true);
-  //     refresh();
-  //   } catch (error) {
-  //     console.log(typeof error);
-  //     toast.error("Xatolik yuz berdi");
-  //   }
-  // };
+  const handleDelete = async (authorId: string) => {
+    try {
+      await Request(`/authors/${authorId}`, "DELETE", {}, true);
+      refresh();
+      toast.success("Muvaffaqiyatli o'chirildi");
+    } catch (error) {
+      console.log(typeof error);
+      toast.error(
+        "Ushbu muallifni o'chira olmaysiz. Chunki bu muallifga kitoblar qo'shilgan"
+      );
+    }
+  };
 
   const handleEdit = async (author: Author) => {
     setEditingId(author.id);
@@ -95,6 +101,12 @@ const AuthorsData = ({ authors, loading }: AuthorsDataProps) => {
 
               <td className=" p-5 ">
                 <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleDelete(author?.id)}
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100"
+                  >
+                    <IoMdClose size={20} />
+                  </button>
                   <button
                     onClick={() => handleEdit(author)}
                     className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-blue-600 hover:bg-gray-100"

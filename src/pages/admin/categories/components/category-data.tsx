@@ -1,6 +1,9 @@
+import toast from "react-hot-toast";
+import { Request } from "../../../../helpers/Request";
 import { useCategoryStore } from "../../../../store/admin/useCategoryStore";
 import { BookCategory } from "../../../../types";
 import { MdModeEdit } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
 
 interface CategoryDataProps {
   loading: boolean;
@@ -8,19 +11,22 @@ interface CategoryDataProps {
   refresh: () => Promise<void>;
 }
 
-const CategoryData = ({ categories, loading }: CategoryDataProps) => {
+const CategoryData = ({ categories, loading, refresh }: CategoryDataProps) => {
   //
   const { setEditingId, setName, setOpen } = useCategoryStore();
 
-  // const handleDelete = async (categoryId: string) => {
-  //   try {
-  //     await Request(`/product-category/${categoryId}`, "DELETE", {}, true);
-  //     refresh();
-  //   } catch (error) {
-  //     console.log(typeof error);
-  //     toast.error("Xatolik yuz berdi");
-  //   }
-  // };
+  const handleDelete = async (categoryId: string) => {
+    try {
+      await Request(`/product-category/${categoryId}`, "DELETE", {}, true);
+      refresh();
+      toast.success("Muvaffaqiyatli o'chirildi");
+    } catch (error) {
+      console.log(typeof error);
+      toast.error(
+        "Ushbu kategoriyani o'chira olmaysiz. Chunki bu kategoriyaga kitoblar qo'shilgan"
+      );
+    }
+  };
 
   const handleUpdate = (bookType: BookCategory) => {
     setEditingId(bookType.id);
@@ -42,10 +48,10 @@ const CategoryData = ({ categories, loading }: CategoryDataProps) => {
           <p>{item.name}</p>
 
           <div className="flex items-center gap-x-1">
-            {/* <IoMdClose
-                        onClick={() => handleDelete(item.id)}
-                        className="size-5 hover:text-red-500 "
-                      /> */}
+            <IoMdClose
+              onClick={() => handleDelete(item.id)}
+              className="size-5 hover:text-red-500 "
+            />
             <MdModeEdit
               onClick={() => handleUpdate(item)}
               className="size-5 hover:text-blue-500 "
