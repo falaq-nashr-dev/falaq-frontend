@@ -49,7 +49,7 @@ const BottomCartNavigation = ({
         </div>
       )}
 
-      <div className="flex items-center justify-between px-4">
+      <div className="flex items-center justify-between px-4 pb-3">
         <div
           onClick={() => navigate("/main")}
           className={`text-center flex flex-col items-center cursor-pointer  ${
@@ -71,7 +71,14 @@ const BottomCartNavigation = ({
           onClick={() => navigate("/")}
           className="text-center flex justify-center items-center cursor-pointer"
         >
-          <img width={45} src={logo} alt="logo" />
+          <img
+            className={`${
+              location.pathname === "/" ? "grayscale-0" : "grayscale"
+            } `}
+            width={45}
+            src={logo}
+            alt="logo"
+          />
         </div>
         <div
           onClick={() => navigate("/cart")}

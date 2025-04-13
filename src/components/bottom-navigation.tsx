@@ -11,7 +11,7 @@ const BottomNavigation = () => {
   const location = useLocation();
 
   return (
-    <div className=" max-w-xl left-1/2 -translate-x-1/2 h-[80px] navigation-shadow fixed bottom-0 w-full  bg-white rounded-t-[24px] flex items-center justify-between px-4 pb-1">
+    <div className=" max-w-xl left-1/2 -translate-x-1/2 h-[80px] navigation-shadow fixed bottom-0 w-full  bg-white rounded-t-[24px] flex items-center justify-between px-4 pb-3">
       <div
         onClick={() => navigate("/main")}
         className={`text-center flex flex-col items-center cursor-pointer  ${
