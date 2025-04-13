@@ -60,7 +60,7 @@ const BooksTable = () => {
 
   return (
     <div
-      className={`overflow-x-auto max-w-2xl ${
+      className={`overflow-x-auto max-w-4xl ${
         loading ? "pointer-events-none opacity-50" : ""
       }`}
     >
