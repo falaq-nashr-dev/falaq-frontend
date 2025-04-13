@@ -33,8 +33,8 @@ const StartPage = () => {
         firstName: name,
         lastName: "",
         birthYear: 0,
-        phoneNumber: phone,
-        password: phone,
+        phoneNumber: phone.trim(),
+        password: phone.trim(),
       });
       const token = extractToken(data as string);
       localStorage.setItem("token", token!);
@@ -42,8 +42,8 @@ const StartPage = () => {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         const { data } = await Request("/auth/login", "POST", {
-          phoneNumber: phone,
-          password: phone,
+          phoneNumber: phone.trim(),
+          password: phone.trim(),
         });
         const token = extractToken(data as string);
         localStorage.setItem("token", token!);

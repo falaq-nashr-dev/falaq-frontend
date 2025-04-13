@@ -28,7 +28,9 @@ const DataTable = () => {
       setLoading(true);
       const { data } = await Request<Order[]>(
         `/orders/status/COMPLETED`,
-        "GET"
+        "GET",
+        {},
+        true
       );
       setOrders(data);
     } catch (error) {

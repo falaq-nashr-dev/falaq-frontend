@@ -30,10 +30,10 @@ const DataTable = () => {
       setLoading(true);
       const { data } = await Request<Order[]>(
         `/orders/status/IN_PROGRESS`,
-        "GET"
+        "GET",
+        {},
+        true
       );
-      console.log(data);
-
       setOrders(data);
     } catch (error) {
       console.log(error);
