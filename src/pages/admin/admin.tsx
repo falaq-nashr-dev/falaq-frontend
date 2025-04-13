@@ -143,7 +143,7 @@ const Admin = () => {
       </div>
 
       {/* Content */}
-      <div className="px-2 w-full py-4">
+      <div className="px-2 w-full py-4 max-w-6xl overflow-x-auto">
         <Outlet />
       </div>
     </div>
