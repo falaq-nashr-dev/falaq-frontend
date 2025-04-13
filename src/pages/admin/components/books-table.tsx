@@ -162,11 +162,11 @@ const BooksTable = () => {
                   />
                 </ImageViewer>
               </td>
-              <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
+              <td className="p-5 line-clamp-4 text-sm leading-6 font-medium text-gray-900">
                 {book.name}
               </td>
 
-              <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
+              <td className="p-5 whitespace-nowrap line-clamp-4 text-sm leading-6 font-medium text-gray-900">
                 {book.author.fullName}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
