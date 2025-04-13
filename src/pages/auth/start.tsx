@@ -24,6 +24,9 @@ const StartPage = () => {
   };
 
   const handleRegister = async () => {
+    if (!validateName() || !validatePhone()) {
+      return;
+    }
     try {
       setLoading(true);
       const { data } = await Request("/auth/register", "POST", {
@@ -73,58 +76,60 @@ const StartPage = () => {
   };
 
   return (
-    <div className="h-screen flex py-5 overflow-y-scroll">
-      <div
-        className={`min-h-[440px] flex flex-col  max-w-[94%] mx-auto w-full pb-10`}
-      >
-        <div>
-          <div className="w-max mx-auto">
-            <img width={70} src={logo} alt="falaq nashr" />
-          </div>
-          <h5 className="text-center font-medium mt-3">
-            Online do’koniga xush kelibsiz
-          </h5>
-          <div className="my-3">
-            <label htmlFor="name">Sizning ismingiz</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              onBlur={validateName}
-              id="name"
-              type="text"
-              placeholder="Islom Muhammad..."
-              className={`block mt-1 w-full h-[48px] bg-gray-100 rounded-2xl pl-4 focus:outline-blue-500 ${
-                nameError ? "border border-red-500" : ""
-              }`}
-            />
-            {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
-          </div>
-          <div className="my-2">
-            <label htmlFor="phone">Sizning telefon raqamingiz</label>
-            <input
-              onFocus={() => {
-                if (!phone) setPhone("+998");
-              }}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              onBlur={validatePhone}
-              id="phone"
-              type="tel"
-              placeholder="+998..."
-              className={`block mt-1 w-full h-[48px] bg-gray-100 rounded-2xl pl-4 focus:outline-blue-500 ${
-                phoneError ? "border border-red-500" : ""
-              }`}
-            />
-            {phoneError && <p className="text-red-500 text-sm">{phoneError}</p>}
-          </div>
-          <div className="mt-6">
-            <button
-              disabled={loading}
-              onClick={handleRegister}
-              className={`w-full h-[48px] rounded-xl bg-[#007AFF] hover:opacity-80 text-white flex items-center justify-center`}
-            >
-              {loading ? "Yuklanmoqda..." : "Ro'yhatdan o'tish"}
-            </button>
+    <div className="h-screen flex  overflow-y-scroll">
+      <div className="container pt-5 py-3 px-3 mx-auto max-w-xl">
+        <div className={`min-h-[440px] flex flex-col w-full pb-10`}>
+          <div>
+            <div className="w-max mx-auto">
+              <img width={70} src={logo} alt="falaq nashr" />
+            </div>
+            <h5 className="text-center font-medium mt-3">
+              Online do’koniga xush kelibsiz
+            </h5>
+            <div className="my-3">
+              <label htmlFor="name">Sizning ismingiz</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onBlur={validateName}
+                id="name"
+                type="text"
+                placeholder="Islom Muhammad..."
+                className={`block mt-1 w-full h-[48px] bg-gray-100 rounded-2xl pl-4 focus:outline-blue-500 ${
+                  nameError ? "border border-red-500" : ""
+                }`}
+              />
+              {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
+            </div>
+            <div className="my-2">
+              <label htmlFor="phone">Sizning telefon raqamingiz</label>
+              <input
+                onFocus={() => {
+                  if (!phone) setPhone("+998");
+                }}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                onBlur={validatePhone}
+                id="phone"
+                type="tel"
+                placeholder="+998..."
+                className={`block mt-1 w-full h-[48px] bg-gray-100 rounded-2xl pl-4 focus:outline-blue-500 ${
+                  phoneError ? "border border-red-500" : ""
+                }`}
+              />
+              {phoneError && (
+                <p className="text-red-500 text-sm">{phoneError}</p>
+              )}
+            </div>
+            <div className="mt-6">
+              <button
+                disabled={loading}
+                onClick={handleRegister}
+                className={`w-full h-[48px] rounded-xl bg-[#007AFF] hover:opacity-80 text-white flex items-center justify-center`}
+              >
+                {loading ? "Yuklanmoqda..." : "Ro'yhatdan o'tish"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

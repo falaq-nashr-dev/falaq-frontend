@@ -1,6 +1,9 @@
+import toast from "react-hot-toast";
 import { useBookTypesStore } from "../../../../store/admin/useBookTypesStore";
 import { BookType } from "../../../../types";
 import { MdModeEdit } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
+import { Request } from "../../../../helpers/Request";
 
 interface BookTypesDataProps {
   loading: boolean;
@@ -8,19 +11,21 @@ interface BookTypesDataProps {
   refresh: () => Promise<void>;
 }
 
-const BookTypesData = ({ bookTypes, loading }: BookTypesDataProps) => {
+const BookTypesData = ({ bookTypes, loading, refresh }: BookTypesDataProps) => {
   //
   const { setEditingId, setName, setOpen } = useBookTypesStore();
 
-  // const handleDelete = async (typeId: string) => {
-  //   try {
-  //     await Request(`/product-type/${typeId}`, "DELETE", {}, true);
-  //     refresh();
-  //   } catch (error) {
-  //     console.log(typeof error);
-  //     toast.error("Xatolik yuz berdi");
-  //   }
-  // };
+  const handleDelete = async (typeId: string) => {
+    try {
+      await Request(`/product-type/${typeId}`, "DELETE", {}, true);
+      refresh();
+    } catch (error) {
+      console.log(typeof error);
+      toast.error(
+        "Ushbu turni o'chira olmaysiz.Chunki bu turga kitoblar qo'shilgan"
+      );
+    }
+  };
 
   const handleUpdate = (bookType: BookType) => {
     setEditingId(bookType.id);
@@ -42,10 +47,10 @@ const BookTypesData = ({ bookTypes, loading }: BookTypesDataProps) => {
           <p> {item.name}</p>
 
           <div className="flex items-center gap-x-1">
-            {/* <IoMdClose
+            <IoMdClose
               onClick={() => handleDelete(item.id)}
               className="size-5 hover:text-red-500 "
-            /> */}
+            />
             <MdModeEdit
               onClick={() => handleUpdate(item)}
               className="size-5 hover:text-blue-500 "

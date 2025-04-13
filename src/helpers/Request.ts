@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
+// export const BASE_URL = "http://localhost.uz/api";
 export const BASE_URL = "https://falaqnashr.uz/api";
 
 export function Request<T = unknown>(
