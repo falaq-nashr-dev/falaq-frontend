@@ -9,7 +9,7 @@ const StartPage = () => {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [isFocus, setIsFocus] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const extractToken = (text: string) => {
@@ -24,9 +24,8 @@ const StartPage = () => {
   };
 
   const handleRegister = async () => {
-    console.log(typeof isFocus);
-
     try {
+      setLoading(true);
       const { data } = await Request("/auth/register", "POST", {
         firstName: name,
         lastName: "",
@@ -36,6 +35,7 @@ const StartPage = () => {
       });
       const token = extractToken(data as string);
       localStorage.setItem("token", token!);
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         const { data } = await Request("/auth/login", "POST", {
@@ -48,6 +48,8 @@ const StartPage = () => {
       } else {
         console.error("Registration error:", error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,10 +72,6 @@ const StartPage = () => {
     return true;
   };
 
-  const handleFocus = () => {
-    setIsFocus(true);
-  };
-
   return (
     <div className="h-screen flex py-5 overflow-y-scroll">
       <div
@@ -89,7 +87,6 @@ const StartPage = () => {
           <div className="my-3">
             <label htmlFor="name">Sizning ismingiz</label>
             <input
-              onFocus={handleFocus}
               value={name}
               onChange={(e) => setName(e.target.value)}
               onBlur={validateName}
@@ -122,10 +119,11 @@ const StartPage = () => {
           </div>
           <div className="mt-6">
             <button
+              disabled={loading}
               onClick={handleRegister}
-              className={`w-full h-[48px] rounded-xl  bg-[#007AFF] hover:opacity-80 text-white flex items-center justify-center`}
+              className={`w-full h-[48px] rounded-xl bg-[#007AFF] hover:opacity-80 text-white flex items-center justify-center`}
             >
-              Ro'yhatdan o'tish
+              {loading ? "Yuklanmoqda..." : "Ro'yhatdan o'tish"}
             </button>
           </div>
         </div>

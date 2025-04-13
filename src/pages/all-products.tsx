@@ -64,7 +64,7 @@ const AllProducts = () => {
   }, []);
 
   return (
-    <div className="pb-20 pt-1">
+    <div className="pb-20 pt-1 ">
       <div className="container py-3 px-4 mx-auto max-w-xl">
         <div className="relative">
           <LuSearch className="size-5 text-gray-600 absolute top-1/2 -translate-y-1/2 left-3" />

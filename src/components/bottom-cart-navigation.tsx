@@ -1,5 +1,6 @@
-import { FiHome, FiSearch, FiUser } from "react-icons/fi";
+import { FiSearch, FiUser } from "react-icons/fi";
 import logo from "../../public/brand-logo.png";
+import { BiFoodMenu } from "react-icons/bi";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../store/useCartStore";
@@ -29,7 +30,7 @@ const BottomCartNavigation = ({
     <div
       className={` ${
         cart.length > 0 ? "h-[160px]" : "h-[80px] pt-4"
-      }  navigation-shadow fixed bottom-0 w-full  bg-white rounded-t-[24px]`}
+      }  navigation-shadow fixed bottom-0 w-full pb-1 bg-white rounded-t-[24px]  max-w-xl left-1/2 -translate-x-1/2 `}
     >
       {cart.length > 0 && (
         <div className="container px-[24px] mb-1 py-[20px]  mx-auto max-w-xl flex justify-between items-center">
@@ -51,10 +52,12 @@ const BottomCartNavigation = ({
       <div className="flex items-center justify-between px-5">
         <div
           onClick={() => navigate("/main")}
-          className="text-center flex flex-col items-center cursor-pointer"
+          className={`text-center flex flex-col items-center cursor-pointer  ${
+            location.pathname === "/main" ? "text-blue-500" : ""
+          }`}
         >
-          <FiHome className="size-5 font-medium" />
-          <p className="mt-2 font-medium text-[14px]">Asosiy</p>
+          <BiFoodMenu className="size-5 font-medium" />
+          <p className="mt-2 font-medium text-[14px]">Bo'limlar</p>
         </div>
         <div
           onClick={() => navigate("/all-products")}
@@ -72,10 +75,12 @@ const BottomCartNavigation = ({
         </div>
         <div
           onClick={() => navigate("/cart")}
-          className="text-center flex flex-col items-center cursor-pointer relative"
+          className={`text-center flex flex-col items-center cursor-pointer relative ${
+            location.pathname === "/cart" && "text-blue-500"
+          }`}
         >
           {cart.length > 0 && (
-            <div className="w-4 h-4 flex justify-center items-center rounded-full text-[10px] bg-blue-500 text-white absolute -top-1 right-2">
+            <div className="w-4 h-4 flex justify-center items-center rounded-full text-[10px] bg-red-500 text-white absolute -top-1 right-2">
               {cart?.length}
             </div>
           )}

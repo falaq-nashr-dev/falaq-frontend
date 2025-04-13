@@ -1,7 +1,5 @@
-import { BsCart3 } from "react-icons/bs";
 import { FaChevronLeft } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useCartStore } from "../../store/useCartStore";
+import { useLocation, useNavigate } from "react-router-dom";
 import logoIcon from "../../assets/logo.svg";
 import { LuSearch } from "react-icons/lu";
 import { useState } from "react";
@@ -11,10 +9,7 @@ import { useStore } from "../../store/useStore";
 const Header = ({ name }: { name: string }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { cart } = useCartStore();
   const isHome = location.pathname === "/";
-  const isDetail = location.pathname.startsWith("/product/");
-  const isProfile = location.pathname.startsWith("/profile");
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [value, setValue] = useState("");
 
@@ -61,19 +56,6 @@ const Header = ({ name }: { name: string }) => {
                 <LuSearch className="size-6" />
               </button>
             ))}
-
-          {!isProfile && !isDetail && (
-            <Link to="/cart">
-              <button className="p-2 rounded-full hover:bg-gray-50 transition-all duration-300 relative">
-                <BsCart3 className="size-6 text-gray-800" />
-                {cart?.length ? (
-                  <div className="w-5 h-5 flex justify-center items-center rounded-full text-xs bg-blue-500 text-white absolute top-0 right-0">
-                    {cart.length}
-                  </div>
-                ) : null}
-              </button>
-            </Link>
-          )}
         </div>
       </div>
       {isSearchVisible && (

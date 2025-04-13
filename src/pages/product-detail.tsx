@@ -48,7 +48,9 @@ const ProductDetail = () => {
       setLoading(true);
       const { data } = await Request<AdminBooks>(
         `/products/${params.id}`,
-        "GET"
+        "GET",
+        {},
+        true
       );
       if (!data) {
         navigate("/");

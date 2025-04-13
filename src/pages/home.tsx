@@ -18,7 +18,9 @@ const Home = () => {
       setLoading(true);
       const { data } = await Request<BookWithType[]>(
         "/products/by-type",
-        "GET"
+        "GET",
+        {},
+        true
       );
       setProducts(data);
     } catch (error) {
