@@ -60,7 +60,7 @@ const BooksTable = () => {
 
   return (
     <div
-      className={`overflow-x-auto ${
+      className={`overflow-x-auto max-w-2xl ${
         loading ? "pointer-events-none opacity-50" : ""
       }`}
     >
@@ -166,7 +166,7 @@ const BooksTable = () => {
                 {book.name}
               </td>
 
-              <td className="p-5 whitespace-nowrap  text-sm leading-6 font-medium text-gray-900">
+              <td className="p-5   text-sm leading-6 font-medium text-gray-900">
                 {book.author.fullName}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
