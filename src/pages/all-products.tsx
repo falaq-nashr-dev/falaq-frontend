@@ -33,7 +33,7 @@ const AllProducts = () => {
           ? `/products/by-type/${state.typeId}`
           : "/products/by-type/all";
 
-        const { data } = await Request<Product[]>(endpoint, "GET");
+        const { data } = await Request<Product[]>(endpoint, "GET", {}, true);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setProducts(query ? data : (data as any)?.products ?? data);
       } catch (error) {
