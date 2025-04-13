@@ -19,10 +19,11 @@ const BookTypesData = ({ bookTypes, loading, refresh }: BookTypesDataProps) => {
     try {
       await Request(`/product-type/${typeId}`, "DELETE", {}, true);
       refresh();
+      toast.success("Muvaffaqiyatli o'chirildi");
     } catch (error) {
       console.log(typeof error);
       toast.error(
-        "Ushbu turni o'chira olmaysiz.Chunki bu turga kitoblar qo'shilgan"
+        "Ushbu turni o'chira olmaysiz. Chunki bu turga kitoblar qo'shilgan"
       );
     }
   };
