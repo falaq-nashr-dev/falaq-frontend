@@ -60,9 +60,11 @@ const OperatorsModal = ({
         "/super-admin/add-operator",
         "POST",
         {
-          ...formData,
-          phoneNumber: formData.phoneNumber.trim(),
-          password: formData.password.trim(),
+          firstName: formData?.firstName,
+          lastName: formData?.lastName,
+          birthYear: 0,
+          phoneNumber: formData?.phoneNumber?.trim(),
+          password: formData?.password?.trim(),
         },
         true
       );

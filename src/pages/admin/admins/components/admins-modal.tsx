@@ -56,7 +56,9 @@ const AdminsModal = ({ handleClose, open, refresh }: AdminsModalProps) => {
         "/super-admin/add-admin",
         "POST",
         {
-          ...formData,
+          firstName: formData?.firstName,
+          lastName: formData?.lastName,
+          birthYear: 0,
           phoneNumber: formData.phoneNumber.trim(),
           password: formData.password.trim(),
         },

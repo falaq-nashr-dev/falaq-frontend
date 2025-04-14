@@ -205,7 +205,9 @@ const ProductDetail = () => {
                 <span className="mt-[2px]">
                   {currentProduct && currentProduct.quantity === 0
                     ? "Sotuvda yo'q"
-                    : currentProduct?.salePrice?.toLocaleString() + " so’m"}
+                    : (
+                        (currentProduct?.salePrice ?? 0) * quantity
+                      )?.toLocaleString() + " so’m"}
                 </span>
               </button>
               {/* About book */}
