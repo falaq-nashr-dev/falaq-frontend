@@ -49,7 +49,7 @@ const CardProducts = () => {
           />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5">
-          {products.length <= 0 && <p>Kitob topilmadi</p>}
+          {!loading && products.length <= 0 && <p>Kitob topilmadi</p>}
           {loading &&
             [1, 1, 1, 1, 1, 1].map((_, ind) => <ProductSkeleton key={ind} />)}
           {products.map((book, ind) => (
