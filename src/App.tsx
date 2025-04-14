@@ -30,6 +30,19 @@ import { useEffect, useMemo } from "react";
 import useUser from "./hooks/use-user";
 import CardProducts from "./pages/card-products";
 
+interface TelegramWebApp {
+  ready: () => void;
+  setBackgroundColor: (color: string) => void;
+}
+
+declare global {
+  interface Window {
+    Telegram?: {
+      WebApp: TelegramWebApp;
+    };
+  }
+}
+
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,6 +71,15 @@ const App = () => {
       }
     }
   }, [loading, location.pathname, navigate, user, userPages]);
+
+  useEffect(() => {
+    // Make sure Telegram is available, then call its methods
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.ready();
+      // Force background to white (dark/light mode ignored)
+      window.Telegram.WebApp.setBackgroundColor("#FFFFFF");
+    }
+  }, []);
 
   return (
     <div>
