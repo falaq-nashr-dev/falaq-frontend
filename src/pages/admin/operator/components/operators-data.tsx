@@ -1,11 +1,23 @@
 import { AiOutlineClose } from "react-icons/ai";
 import { Operator } from "../../../../types";
 import { formatUzbekPhoneNumber } from "../../../../helpers/phone";
+import { Request } from "../../../../helpers/Request";
 interface OperatorsDataProps {
   operators: Operator[];
   loading: boolean;
+  refresh: () => Promise<void>;
 }
-const OperatorsData = ({ operators, loading }: OperatorsDataProps) => {
+const OperatorsData = ({ operators, loading, refresh }: OperatorsDataProps) => {
+  //
+  const handleDelete = async (id: string) => {
+    try {
+      await Request(`/delete-operator/${id}`, "DELETE", {}, true);
+      refresh();
+    } catch (error) {
+      console.log(typeof error);
+    }
+  };
+
   return (
     <div
       className={`overflow-x-auto ${
@@ -74,7 +86,10 @@ const OperatorsData = ({ operators, loading }: OperatorsDataProps) => {
 
               <td className=" p-5 ">
                 <div className="flex items-center gap-1">
-                  <button className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100">
+                  <button
+                    onClick={() => handleDelete(operator.id)}
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100"
+                  >
                     <AiOutlineClose size={20} />
                   </button>
                 </div>

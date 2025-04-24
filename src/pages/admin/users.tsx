@@ -25,7 +25,7 @@ const Users = () => {
   };
   return (
     <div>
-      <UsersTable data={users} />
+      <UsersTable data={users} refresh={fetchUsers} />
     </div>
   );
 };

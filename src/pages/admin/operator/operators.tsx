@@ -43,7 +43,11 @@ const Operators = () => {
         </button>
       </div>
       <div className="mt-2">
-        <OperatorsData operators={operators} loading={loading} />
+        <OperatorsData
+          operators={operators}
+          loading={loading}
+          refresh={fetchOperators}
+        />
       </div>
       <div>
         <OperatorsModal
