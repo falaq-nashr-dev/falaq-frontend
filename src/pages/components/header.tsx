@@ -1,87 +1,125 @@
-import { FaChevronLeft } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
-import logoIcon from "../../assets/logo.svg";
-import { LuSearch } from "react-icons/lu";
-import { useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
-import { useStore } from "../../store/useStore";
+import { CircleUser, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Logo from "./logo";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useCartStore } from "@/store/useCartStore";
 
-const Header = ({ name }: { name: string }) => {
-  const location = useLocation();
+const Header = () => {
+  const links = [
+    {
+      id: 1,
+      name: "Asosiy",
+      link: "/",
+    },
+    {
+      id: 2,
+      name: "Bo'limlar",
+      link: "/main",
+    },
+    {
+      id: 3,
+      name: "Barcha kitoblar",
+      link: "/all-products",
+    },
+  ];
+  const { pathname } = useLocation();
+
   const navigate = useNavigate();
-  const isHome = location.pathname === "/";
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [value, setValue] = useState("");
-
-  const { setSearchValue, setCurrentPage } = useStore();
+  const { cart } = useCartStore();
 
   return (
-    <>
-      <div className="flex items-center justify-between">
-        {isHome ? (
-          <div className="flex items-center gap-x-3">
-            <img src={logoIcon} alt="logo" />
-            <p className="font-medium text-lg">Falaq Nashr</p>
-          </div>
-        ) : (
-          <div
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-x-1 cursor-pointer"
+    <header
+      className={`min-h-[84px] flex items-center ${
+        pathname == "/cart" || pathname.startsWith("/product")
+          ? "bg-white"
+          : "bg-[#E9F2F8]"
+      } `}
+    >
+      <div className="container max-w-7xl mx-auto flex items-center justify-between px-3">
+        <Logo />
+        {/* <div className="relative w-1/3 hidden sm:block">
+            <SearchIcon
+              size={18}
+              className="text-gray-400 absolute top-1/2 -translate-y-1/2 left-3"
+            />
+            <Input placeholder="Qidirish..." className="pl-10" />
+            <ChevronDown
+              size={18}
+              className="text-gray-400 absolute top-1/2 -translate-y-1/2 right-3"
+            />
+          </div> */}
+        <ul className="gap-5 lg:gap-7 hidden md:flex">
+          {links.map((item, index) => (
+            <Link key={index} to={item.link}>
+              <li
+                className={`font-medium cursor-pointer hover:text-blue-500 transition-all duration-300 ${
+                  item.link === pathname && "text-blue-500"
+                }`}
+              >
+                {item.name}
+              </li>
+            </Link>
+          ))}
+        </ul>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => navigate("/cart")}
+            size={"icon"}
+            variant={"link"}
+            className="cursor-pointer group"
           >
-            <FaChevronLeft className="mt-[1px]" />
-            <p className="font-medium text-gray-700">{name}</p>
-          </div>
-        )}
+            <div className="relative">
+              <ShoppingCart
+                size={33}
+                className="size-7 scale-125 group-hover:scale-150 transition-all duration-300"
+              />
 
-        <div className="flex items-center">
-          {isHome &&
-            (isSearchVisible ? (
-              <button
-                onClick={() => {
-                  setValue("");
-                  setSearchValue("");
-                  setIsSearchVisible(false);
-                }}
-                aria-label="search"
-                className="p-2 rounded-full hover:bg-gray-50 transition-all duration-300"
-              >
-                <AiOutlineClose className="size-6" />
-              </button>
-            ) : (
-              <button
-                onClick={() => setIsSearchVisible(true)}
-                aria-label="search"
-                className="p-2 rounded-full hover:bg-gray-50 transition-all duration-300"
-              >
-                <LuSearch className="size-6" />
-              </button>
-            ))}
+              {cart.length > 0 && (
+                <span
+                  className="absolute -top-2 -right-3 inline-flex items-center justify-center
+               w-4 h-4 text-[10px] font-semibold text-white bg-blue-600 rounded-full
+               shadow-md ring-2 ring-white"
+                >
+                  {cart.length > 99 ? "99+" : cart.length}
+                </span>
+              )}
+            </div>
+          </Button>
+          {/* <Button
+              onClick={() => navigate("/wishlist")}
+              size={"icon"}
+              variant={"link"}
+              className="cursor-pointer group"
+            >
+              <div className="relative">
+                <Heart
+                  size={33}
+                  className="size-7 scale-125 group-hover:scale-150 transition-all duration-300"
+                />
+
+                {wishlist.length > 0 && (
+                  <span
+                    className="absolute -top-2 -right-3 inline-flex items-center justify-center
+               w-4 h-4 text-[10px] font-semibold text-white bg-red-600 rounded-full
+               shadow-md ring-2 ring-white"
+                  >
+                    {wishlist.length > 99 ? "99+" : wishlist.length}
+                  </span>
+                )}
+              </div>
+            </Button> */}
+          <Button
+            onClick={() => navigate("/profile")}
+            aria-label="User"
+            size={"icon"}
+            variant={"link"}
+            className="cursor-pointer group"
+          >
+            <CircleUser className="size-6 scale-125 group-hover:scale-150 transition-all duration-300" />
+          </Button>
         </div>
       </div>
-      {isSearchVisible && (
-        <div className="py-2  animate-fade-in flex items-center gap-x-2">
-          <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            type="search"
-            id="search"
-            className=" border border-gray-300 text-gray-900 text-sm rounded-md outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-            placeholder="qidirish..."
-          />
-
-          <button
-            onClick={() => {
-              setCurrentPage(1);
-              setSearchValue(value);
-            }}
-            aria-label="search"
-            className="p-2 rounded-full hover:bg-gray-50 transition-all duration-300"
-          >
-            <LuSearch className="size-6" />
-          </button>
-        </div>
-      )}
-    </>
+    </header>
   );
 };
 

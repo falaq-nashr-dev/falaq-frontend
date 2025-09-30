@@ -1,46 +1,35 @@
+import { getImage } from "@/helpers/image";
+import { AdminBooks } from "@/types";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { FaStar } from "react-icons/fa";
-import { HomeBook } from "../../types";
-import { getImage } from "../../helpers/image";
 
-const Product = ({ book }: { book: HomeBook }) => {
+const Product = ({ book }: { book: AdminBooks; isLiked?: boolean }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   return (
     <div
       onClick={() => navigate(`/product/${book.id}`)}
-      className="max-w-[145px] flex-shrink-0 w-full rounded-md cursor-pointer"
+      className="w-full rounded-xl cursor-pointer hover:scale-[101%] transition-transform duration-300"
     >
-      <div className="max-w-[165px]  flex justify-center items-center">
-        {loading && (
-          <div className="w-max h-[220px]  bg-gray-200 animate-pulse rounded-md"></div>
-        )}
+      {/* Image wrapper */}
+      <div className="relative flex justify-center items-center w-full aspect-[3/4] bg-[#F7F7F7] rounded-lg overflow-hidden">
         <img
-          onLoad={() => setLoading(false)}
-          src={
-            book.photo
-              ? getImage(book.photo.prefix, book.photo.name)
-              : "new.png"
-          }
-          alt="book image"
-          className={`w-full h-full transition-opacity duration-300 ${
-            loading ? "opacity-0" : "opacity-100"
-          }`}
+          src={getImage(book.photo.prefix, book.photo.name)}
+          alt="Book Cover"
+          className="object-cover transition-opacity duration-300"
         />
       </div>
-      <div className="mt-[6px]">
-        <p className="line-clamp-1 font-medium text-[15px]">{book.name}</p>
-        <div className="mt-1 flex items-center gap-x-1">
-          <FaStar className="size-4 -mt-1 text-[#EFCB39]" />
-          <p className="text-gray-600 text-[13px] font-medium">{book.rating}</p>
-        </div>
-        <div className="flex items-center justify-between mt-1">
-          <p className="font-semibold text-[15px] text-[#0E1A23]">
-            {book.salePrice?.toLocaleString() || "0"} so’m
-          </p>
-        </div>
+
+      {/* Texts */}
+      <div className="mt-2">
+        <p className="line-clamp-1 text-base sm:text-lg font-semibold">
+          {book.name}
+        </p>
+        <p className="text-[#7C7C7C] text-xs sm:text-sm line-clamp-1">
+          {book.author.fullName}
+        </p>
+        <p className="font-bold text-[#207BBE] text-base sm:text-xl mt-1">
+          {book.salePrice?.toLocaleString()} so’m
+        </p>
       </div>
     </div>
   );

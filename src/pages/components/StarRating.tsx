@@ -17,15 +17,15 @@ const StarRating: React.FC<StarRatingProps> = ({
   };
 
   return (
-    <div className="flex flex-row gap-x-3 w-fit mx-auto mb-5">
+    <div className="flex flex-row gap-x-3 w-fit  mb-5">
       {Array.from({ length: 5 }, (_, index) => {
         const starNumber = index + 1;
         return (
           <span
             key={starNumber}
             onClick={() => handleClick(starNumber)}
-            className={`cursor-pointer text-6xl ${
-              starNumber <= rating ? "text-yellow-400" : "text-gray-400"
+            className={`cursor-pointer text-4xl ${
+              starNumber <= rating ? "text-[#EFCB39]" : "text-gray-400"
             }`}
           >
             ★

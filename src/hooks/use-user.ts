@@ -8,7 +8,6 @@ interface User {
   birthYear: number;
   phoneNumber: string;
   role: "USER" | "SUPER_ADMIN" | "ADMIN" | "OPERATOR";
-  // Add other user properties as needed
 }
 
 const useUser = () => {

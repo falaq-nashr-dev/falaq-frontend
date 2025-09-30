@@ -110,6 +110,7 @@ export type AdminBooks = {
   quantity: number;
   description: string;
   about: string;
+  rating: number;
 };
 
 export type Operator = {
@@ -183,7 +184,7 @@ export type HomeBook = {
 export type BookWithType = {
   id: string;
   typeName: string;
-  products: HomeBook[];
+  products: AdminBooks[];
 };
 
 export type Review = {

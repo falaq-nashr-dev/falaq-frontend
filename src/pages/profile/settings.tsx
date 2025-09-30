@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import BottomNavigation from "../../components/bottom-navigation";
-import Header from "../components/header";
 import useUser from "../../hooks/use-user";
 
 const Settings = () => {
@@ -75,7 +74,6 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-white py-2">
       <div className="container py-3 px-4 mx-auto max-w-xl min-h-[500px]">
-        <Header name="Orqaga" />
         <div className="mt-5 space-y-5 min-h-[300px]">
           {/* Phone Number Input */}
           <div>

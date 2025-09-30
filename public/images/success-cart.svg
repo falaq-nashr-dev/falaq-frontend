@@ -1,0 +1,49 @@
+<svg width="250" height="210" viewBox="0 0 250 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_ii_1_2744)">
+<circle cx="125" cy="110" r="67" fill="#E9F2F8"/>
+</g>
+<path d="M69.9563 95.2511C78.105 64.8396 109.351 46.8113 139.748 54.9562C170.146 63.1012 188.192 94.3376 180.043 124.749C171.894 155.161 140.649 173.188 110.251 165.043C79.8537 156.898 61.8077 125.663 69.9563 95.2511ZM155.647 92.6339C154.257 91.2294 151.998 91.251 150.615 92.6134L118.403 124.836L105.573 110.186C104.642 108.461 102.483 107.809 100.746 108.744C99.0189 109.646 98.3567 111.828 99.2883 113.553L114.688 132.285C115.616 134.009 117.775 134.66 119.512 133.725C120.033 133.459 155.626 97.6769 155.653 97.6505C157.035 96.288 157.042 94.0034 155.647 92.6339Z" fill="#4BB543"/>
+<ellipse cx="209.549" cy="90.3733" rx="4.3542" ry="4.33778" fill="#4BB543"/>
+<ellipse cx="34.6523" cy="156.884" rx="4.3542" ry="4.33778" fill="#4BB543"/>
+<ellipse cx="68.0183" cy="194.476" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="54.248" cy="52.0541" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="107.941" cy="28.1951" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="187.77" cy="48.4386" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="42.6345" cy="19.5209" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="3.44162" cy="83.1393" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="230.58" cy="63.6212" rx="4.3542" ry="4.33778" fill="#4BB543"/>
+<ellipse cx="189.221" cy="8.67713" rx="4.3542" ry="4.33778" fill="#4BB543"/>
+<ellipse cx="4.3542" cy="4.33778" rx="4.3542" ry="4.33778" transform="matrix(-1 0 0 1 28.1165 54.9441)" fill="#4BB543"/>
+<ellipse cx="4.3542" cy="4.33778" rx="4.3542" ry="4.33778" transform="matrix(-1 0 0 1 23.7605 124.353)" fill="#4BB543"/>
+<ellipse cx="4.3542" cy="4.33778" rx="4.3542" ry="4.33778" transform="matrix(-1 0 0 1 158.012 26.7477)" fill="#4BB543"/>
+<ellipse cx="4.3542" cy="4.33778" rx="4.3542" ry="4.33778" transform="matrix(-1 0 0 1 75.2898 18.0734)" fill="#4BB543"/>
+<ellipse cx="4.3542" cy="4.33778" rx="4.3542" ry="4.33778" transform="matrix(-1 0 0 1 205.194 145.315)" fill="#4BB543"/>
+<ellipse cx="223.328" cy="120.013" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="209.541" cy="23.8584" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="142.048" cy="4.33802" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="144.944" cy="206.769" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="246.558" cy="145.438" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="107.941" cy="2.89185" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="34.6452" cy="96.1528" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="206.635" cy="191.708" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="105.936" cy="207.108" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<ellipse cx="171.264" cy="189.155" rx="2.9028" ry="2.89185" fill="#4BB543"/>
+<defs>
+<filter id="filter0_ii_1_2744" x="57.9998" y="41.4712" width="134" height="137.058" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1.52883"/>
+<feGaussianBlur stdDeviation="1.52883"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.844607 0 0 0 0 0.844607 0 0 0 0 0.844607 0 0 0 0.298547 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_1_2744"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="-1.52883"/>
+<feGaussianBlur stdDeviation="1.52883"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.843137 0 0 0 0 0.843137 0 0 0 0 0.843137 0 0 0 0.3 0"/>
+<feBlend mode="normal" in2="effect1_innerShadow_1_2744" result="effect2_innerShadow_1_2744"/>
+</filter>
+</defs>
+</svg>

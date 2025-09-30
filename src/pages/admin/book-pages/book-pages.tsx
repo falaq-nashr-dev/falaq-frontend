@@ -31,26 +31,6 @@ const BookPages = () => {
     }
   };
 
-  // const fetchBookPages = useCallback(async () => {
-  //   try {
-  //     const { data } = await Request<BookPage[]>(
-  //       "/book-pages",
-  //       "GET",
-  //       {},
-  //       true
-  //     );
-  //     setBookPages(data);
-  //   } catch (error) {
-  //     console.error("Failed to fetch book pages:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   fetchBookPages();
-  // }, [fetchBookPages]);
-
   return (
     <div>
       <div className="pb-5 px-3 flex justify-between items-center">

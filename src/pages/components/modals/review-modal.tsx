@@ -3,7 +3,7 @@ import { CgClose } from "react-icons/cg";
 import { Drawer } from "vaul";
 import { Request } from "../../../helpers/Request";
 import toast from "react-hot-toast";
-import StarRating from "./StarRating";
+import StarRating from "../StarRating";
 
 interface ReviewModalProps {
   open: boolean;

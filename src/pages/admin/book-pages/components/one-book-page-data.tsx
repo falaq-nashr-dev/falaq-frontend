@@ -33,7 +33,8 @@ const OneBookPageData = () => {
         {},
         true
       );
-      setBookPages(data);
+      const sortedPages = data.sort((a, b) => a.pageNumber - b.pageNumber);
+      setBookPages(sortedPages);
     } catch (error) {
       console.log(error);
     } finally {

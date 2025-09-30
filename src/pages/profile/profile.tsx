@@ -1,5 +1,4 @@
 import { TbLogout } from "react-icons/tb";
-import Header from "../components/header";
 import BottomNavigation from "../../components/bottom-navigation";
 import logo from "/avatar.png";
 import { FiChevronRight, FiPhone } from "react-icons/fi";
@@ -19,7 +18,6 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-white py-2">
       <div className="container py-3 px-4 mx-auto max-w-xl min-h-[500px]">
-        <Header name="Profil" />
         <div className="mt-5">
           <div className="mx-auto">
             <div className="w-[80px] h-[80px] rounded-full bg-gray-300 mx-auto flex justify-center items-center">
