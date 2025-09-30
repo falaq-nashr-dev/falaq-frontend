@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getImage } from "../../helpers/image";
 import { FaStar } from "react-icons/fa";
-import { Product } from "../all-products";
+import { Product } from "@/store/useCartStore";
 
 const ProductCard = ({ book }: { book: Product }) => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const ProductCard = ({ book }: { book: Product }) => {
         <p className="line-clamp-1 font-medium">{book.name}</p>
         <div className="mt-1 flex items-center gap-x-1">
           <FaStar className="size-4 text-[#EFCB39] -mt-[2px]" />
-          <p className="text-gray-600 font-medium">{book.rating}</p>
+          <p className="text-gray-600 font-medium">{book.quantity}</p>
         </div>
         <div className="flex items-center justify-between mt-1">
           <p className="font-semibold text-lg text-[#0E1A23]">
