@@ -71,7 +71,8 @@ const App = () => {
 
   const shouldShowHeader =
     !location.pathname.includes("/start") &&
-    !location.pathname.includes("/admin");
+    !location.pathname.includes("/admin") &&
+    !location.pathname.includes("/sign-in");
 
   useEffect(() => {
     const token = localStorage.getItem("token");

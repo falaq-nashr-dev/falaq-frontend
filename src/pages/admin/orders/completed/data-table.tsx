@@ -4,6 +4,8 @@ import { Order } from "../../../../types";
 import { formatDate } from "../../../../helpers/date";
 import { formatUzbekPhoneNumber } from "../../../../helpers/phone";
 import { FaRegEye } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 import ItemsModal from "../new/items-modal";
 
 const DataTable = () => {
@@ -43,6 +45,19 @@ const DataTable = () => {
   const handleSeeDetail = (selectedOrder: Order) => {
     setOpen(true);
     setCurrentOrder(selectedOrder);
+  };
+
+  const handleDeleteOrder = async (orderId: string) => {
+    const confirmDelete = window.confirm(
+      "Haqiqatdan ham buyurtmani o'chirmoqchimisiz?"
+    );
+    if (!confirmDelete) return;
+    try {
+      await Request(`/orders/${orderId}`, "DELETE", {}, true);
+      fetchCompletedOrders();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -128,6 +143,13 @@ const DataTable = () => {
               </td>
               <td className=" p-5 ">
                 <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleDeleteOrder(order.orderId)}
+                    title="O'chirish"
+                    className="p-2 rounded-full  group transition-all duration-500  flex item-center hover:text-red-600 hover:bg-gray-100"
+                  >
+                    <MdDelete size={20} />
+                  </button>
                   <button
                     onClick={() => handleSeeDetail(order)}
                     title="Mahsulotlarni ko'rish"
