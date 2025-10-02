@@ -169,7 +169,7 @@ const AdsSection = () => {
                 <p
                   className={`text-white font-semibold ${
                     desktop ? "text-lg mb-2" : "text-sm sm:text-lg mb-1 sm:mb-2"
-                  } line-clamp-2`}
+                  } line-clamp-1`}
                 >
                   {product?.name || "Kitob nomi"}
                 </p>
