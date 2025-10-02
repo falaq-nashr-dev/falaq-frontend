@@ -29,6 +29,7 @@ import ModalDrawer from "@/components/modal-drawer";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import BookDemo from "./components/book-demo";
 import { CgSpinner } from "react-icons/cg";
+import NavNavigate from "@/components/nav-navigate";
 
 const ProductDetail = () => {
   const { addToCart } = useCartStore();
@@ -178,6 +179,7 @@ const ProductDetail = () => {
     <>
       <div className="min-h-screen bg-white xs:bg-[#E9F2F8] md:py-8 xs:py-12 pb-20 sm:pb-0 xs:pb-20">
         <div className="container mx-auto max-w-7xl px-1 md:px-2">
+          <NavNavigate />
           <div className="flex flex-col lg:flex-row items-center gap-6">
             <div className="w-full sm:w-1/2 lg:w-[38%] flex justify-center md:justify-normal">
               <img
@@ -293,13 +295,24 @@ const ProductDetail = () => {
           </div>
           {/* reviews mobile */}
           <div className="sm:hidden mt-10 px-2">
-            <div
-              onClick={() => navigate(`/product/reviews/${currentProduct?.id}`)}
-              className="flex items-center hover:underline transition-all duration-300 cursor-pointer w-fit"
-            >
-              <p className="font-semibold">Mijozlarning sharhlari</p>
-              <ChevronRight size={18} className="text-gray-500" />
+            <div className="flex items-center justify-between">
+              <div
+                onClick={() =>
+                  navigate(`/product/reviews/${currentProduct?.id}`)
+                }
+                className="flex items-center hover:underline transition-all duration-300 cursor-pointer w-fit"
+              >
+                <p className="font-semibold">Mijozlarning sharhlari</p>
+                <ChevronRight size={18} className="text-gray-500" />
+              </div>
+              <Button
+                onClick={() => setReviewOpen(true)}
+                className="w-[100px] h-[20px] xs:w-[174px] xs:h-[36px] bg-[#207BBE] hover:bg-[#207cbed2] text-white font-medium text-xs xs:text-base active:scale-105 transition-all duration-300 rounded-[8px] py-4"
+              >
+                Sharx qoldirish
+              </Button>
             </div>
+
             <div className="mt-3 flex justify-between items-center">
               <h1 className="font-bold text-5xl">{currentProduct?.rating}</h1>
               <div>

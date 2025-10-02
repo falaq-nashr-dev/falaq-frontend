@@ -4,6 +4,7 @@ import { Review } from "@/types";
 import { Request } from "@/helpers/Request";
 import ReviewItem from "./components/review-item";
 import EmptyReviews from "./components/empty-reviews";
+import NavNavigate from "@/components/nav-navigate";
 
 const ReviewSkeleton = () => (
   <div className="animate-pulse border-b py-4">
@@ -48,6 +49,7 @@ const BookReviews = () => {
 
   return (
     <div className="pb-12 bg-white xs:bg-[#E9F2F8]">
+      <NavNavigate />
       <div className="container max-w-7xl mx-auto px-3 md:px-1 py-2 md:py-8">
         <h1 className="text-[#11142D] text-lg font-bold md:text-[36px]">
           Barcha izohlar ({reviews.length})

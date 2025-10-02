@@ -59,7 +59,7 @@ const RatingStar = ({
       {/* Show rating count */}
       {isShowNumber && (
         <span className="ml-0.5 sm:ml-2 text-sm text-[#11142D] font-bold">
-          {count}
+          {count?.toFixed(1)}
         </span>
       )}
 

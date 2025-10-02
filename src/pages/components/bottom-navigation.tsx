@@ -65,7 +65,7 @@ const BottomNavigation = () => {
       id: "profil",
       label: "Profil",
       href: "/profile",
-      isActive: pathname === "/settings/profile",
+      isActive: pathname === "/profile",
       icon: <User className="w-6 h-6" />,
     },
   ];

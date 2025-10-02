@@ -27,7 +27,7 @@ const ReviewItem = ({
               <ReviewRating count={count} />
             </div>
           </div>
-          <p className="text-[14px] text-[#53585F] font-medium">28.04.2022</p>
+          <p className="text-[14px] text-[#53585F] font-medium">28.04.2025</p>
         </div>
         <p className="font-medium text-base text-[#53585F] mt-6">{content}</p>
       </div>

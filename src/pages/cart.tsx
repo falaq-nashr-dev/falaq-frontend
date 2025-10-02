@@ -13,6 +13,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { useStore } from "@/store/useStore";
 import { Request } from "@/helpers/Request";
 import CompletedMessage from "./components/completed-message";
+import NavNavigate from "@/components/nav-navigate";
 
 interface OrderErrors {
   phone: string;
@@ -225,6 +226,7 @@ const Cart = () => {
   return (
     <>
       <div className="bg-white sm:bg-[#E9F2F8] pt-1 sm:py-3 px-2 md:py-12">
+        <NavNavigate />
         {/* Desktop View */}
         <div className="hidden sm:block container max-w-7xl mx-auto px-3 sm:px-1">
           <div>

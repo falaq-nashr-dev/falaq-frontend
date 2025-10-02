@@ -1,6 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "../../../public/images/user.svg";
+import logo from "../../../public/images/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "@/store/useCartStore";
 import useUser from "@/hooks/use-user";
@@ -22,8 +22,8 @@ const MobileNavbar = () => {
   return (
     <header>
       <div className="container px-3 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-[48px] h-[48px] rounded-full bg-gradient-to-tr to-[#00BCE6] from-[#D500F9] overflow-hidden">
+        <div className="flex items-center gap-2">
+          <div className=" rounded-full ">
             <img
               alt="User avatar"
               src={logo}

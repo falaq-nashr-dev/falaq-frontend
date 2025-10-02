@@ -30,11 +30,13 @@ const BookWithTypeWrapper = () => {
 
   return (
     <div className="pb-12">
-      {products.map((product, ind) => (
-        <div key={ind} className="mt-1">
-          <BooksWithType data={product} loading={loading} />
-        </div>
-      ))}
+      {products
+        .filter((pr) => pr.products.length > 0)
+        .map((product, ind) => (
+          <div key={ind} className="mt-1">
+            <BooksWithType data={product} loading={loading} />
+          </div>
+        ))}
     </div>
   );
 };
