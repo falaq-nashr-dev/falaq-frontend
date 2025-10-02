@@ -199,7 +199,7 @@ const AdsSection = () => {
   );
 
   return (
-    <div className="container mx-auto max-w-7xl py-2 pb-8 md:py-14 px-3 md:px-1">
+    <div className="container mx-auto max-w-7xl py-2 md:py-14 px-3 md:px-1">
       {/* Loading & Error states */}
       {loading && (
         <div className="animate-pulse grid grid-cols-1 lg:grid-cols-4 gap-6">
