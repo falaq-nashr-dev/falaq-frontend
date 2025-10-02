@@ -109,9 +109,10 @@ const AdsSection = () => {
     desktop?: boolean;
   }) => (
     <div
+      style={{ backgroundImage: `url(${bgUrl})` }}
       className={`relative rounded-2xl overflow-hidden shadow-lg ${
         desktop ? "p-6 max-w-sm mx-auto h-full" : "p-4 sm:p-6 h-full"
-      } text-center bg-[url('${bgUrl}')] bg-cover bg-center`}
+      } text-center bg-cover bg-center`}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
       onClick={onClick}
