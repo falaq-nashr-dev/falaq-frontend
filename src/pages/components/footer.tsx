@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import logo from "../../../public/images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 
