@@ -26,7 +26,7 @@ const Footer = () => {
               </h3>
             </div>
 
-            {/* <div className="space-y-3">
+            <div className="space-y-3">
               <h4 className="font-medium text-gray-700">
                 Bizga obuna bo&apos;ling
               </h4>
@@ -69,7 +69,7 @@ const Footer = () => {
                 </Link>
               </div>
             </div>
-          </div> */}
+          </div>
 
           {/* Useful Links */}
           <div className="space-y-4">
