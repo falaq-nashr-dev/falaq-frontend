@@ -72,9 +72,19 @@ const AdsSection = () => {
   );
 
   // Safely pick the first product in each category
-  const bestsellerProduct: Product | undefined =
-    bestsellerType?.products?.[FIRST];
-  const popularProduct: Product | undefined = popularType?.products?.[FIRST];
+  // const bestsellerProduct: Product | undefined =
+  //   bestsellerType?.products?.[FIRST];
+  // const popularProduct: Product | undefined = popularType?.products?.[FIRST];
+
+  const getRandomProduct = (products?: Product[]) => {
+  if (!products || products.length === 0) return undefined;
+  const randomIndex = Math.floor(Math.random() * products.length);
+  return products[randomIndex];
+};
+
+const bestsellerProduct: Product | undefined = getRandomProduct(bestsellerType?.products);
+const popularProduct: Product | undefined = getRandomProduct(popularType?.products);
+
 
   const handleNavigate = (typeId?: string, typeName?: string) => {
     if (!typeId || !typeName) return;
