@@ -11,7 +11,7 @@ import type { BookWithType } from "@/types";
 
 type Product = NonNullable<BookWithType["products"]>[number];
 
-const FIRST = 0;
+// const FIRST = 0;
 
 const AdsSection = () => {
   const [loading, setLoading] = useState(false);
