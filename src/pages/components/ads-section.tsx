@@ -236,7 +236,7 @@ const AdsSection = () => {
           <div className="col-span-1 lg:hidden grid grid-cols-2 gap-4">
             <PromoCard
               title="Best Seller"
-              subtitle="Bu hafta eng ko‘p sotilgan"
+              subtitle="Eng ko‘p sotilgan kitoblar"
               type={bestsellerType}
               product={bestsellerProduct}
               bgUrl="/images/ads-overlay1.svg"
@@ -248,8 +248,8 @@ const AdsSection = () => {
               }
             />
             <PromoCard
-              title="Chegirma"
-              subtitle="Bu hafta eng ko‘p chegirmada sotilgan"
+              title="New"
+              subtitle="Yangi qo'shilgan kitoblar"
               type={popularType}
               product={popularProduct}
               bgUrl="/images/ads-overlay2.svg"
@@ -267,7 +267,7 @@ const AdsSection = () => {
             <PromoCard
               desktop
               title="Best Seller"
-              subtitle="Bu hafta eng ko‘p sotilgan"
+              subtitle="Eng ko‘p sotilgan kitoblar"
               type={bestsellerType}
               product={bestsellerProduct}
               bgUrl="/images/ads-overlay1.svg"
@@ -284,8 +284,8 @@ const AdsSection = () => {
           <div className="hidden lg:block lg:order-3">
             <PromoCard
               desktop
-              title="Chegirma"
-              subtitle="Bu hafta chegirmada sotilganlar"
+              title="New"
+              subtitle="Yangi qo'shilgan kitoblar"
               type={popularType}
               product={popularProduct}
               bgUrl="/images/ads-overlay2.svg"
