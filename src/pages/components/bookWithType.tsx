@@ -36,14 +36,14 @@ const BooksWithType = ({ data, loading }: BooksWithTypeProps) => {
           <ChevronRight size={20} className="-ml-1 mt-[3px] text-black" />
         </Button>
       </div>
-      <div className="mt-3 sm:mt-6 grid grid-flow-col auto-cols-[minmax(170px,1fr)] sm:auto-cols-[minmax(180px,1fr)] md:auto-cols-[minmax(200px,1fr)]  gap-4 md:gap-3 overflow-x-auto scrollbar-hide overflow-y-hidden">
+      <div className="mt-3 sm:mt-6 grid grid-flow-col auto-cols-[minmax(170px,1fr)] sm:auto-cols-[minmax(180px,1fr)] md:auto-cols-[minmax(200px,1fr)] gap-4 md:gap-3 overflow-x-auto scrollbar-hide overflow-y-hidden">
         {loading &&
           Array(4)
             .fill(null)
             .map((_, index) => <ProductSkeleton key={index} />)}
         {data.products.map((book) => (
-          // <Product key={ind} book={book} />
           <NewCard
+            quantity={book.quantity}
             key={book.id}
             id={book.id}
             imageUrl={getImage(book.photo?.prefix, book.photo?.name)}

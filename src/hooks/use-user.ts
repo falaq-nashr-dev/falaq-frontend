@@ -2,6 +2,16 @@ import { useState, useEffect } from "react";
 import { Request } from "../helpers/Request";
 import { useLocation, useNavigate } from "react-router-dom";
 
+const OPEN_PAGES: string[] = [
+  "/start",
+  "/",
+  "/main",
+  "/all-products",
+  "/product",
+  "/sign-in",
+  "/cart",
+];
+
 interface User {
   firstName: string;
   lastName: string;
@@ -17,18 +27,24 @@ const useUser = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const currentPath = location.pathname;
 
   useEffect(() => {
+    if (
+      OPEN_PAGES.includes(currentPath) ||
+      currentPath.startsWith("/product/")
+    ) {
+      setLoading(false);
+      return;
+    }
+
     const fetchUser = async () => {
       try {
         const { data } = await Request<User>("/auth/profile", "GET", {}, true);
         setUser(data);
       } catch (err) {
         setError((err as Error).message);
-        if (
-          location.pathname === "/sign-in" ||
-          location.pathname.startsWith("/admin")
-        ) {
+        if (currentPath.startsWith("/admin")) {
           navigate("/sign-in");
         } else {
           navigate("/start");
@@ -39,7 +55,7 @@ const useUser = () => {
     };
 
     fetchUser();
-  }, [location.pathname, navigate]);
+  }, [currentPath, navigate]);
 
   return { user, loading, error };
 };

@@ -1,3 +1,5 @@
+import type React from "react";
+
 import { Input } from "@/components/ui/input";
 import EmptyCart from "../components/empty-cart";
 import { Product, useCartStore } from "../store/useCartStore";
@@ -14,6 +16,10 @@ import { useStore } from "@/store/useStore";
 import { Request } from "@/helpers/Request";
 import CompletedMessage from "./components/completed-message";
 import NavNavigate from "@/components/nav-navigate";
+import axios from "axios";
+
+// ✅ NEW
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface OrderErrors {
   phone: string;
@@ -31,9 +37,76 @@ interface OrderData {
 
 const PHONE_REGEX = /^\+998\d{9}$/;
 
+// ✅ NEW – sessionStorage key
+const PENDING_ORDER_KEY = "pendingCartOrder";
+
+// ---- Helpers (outside component, so they don't re-create on each render) ----
+const extractToken = (text: string) => {
+  const prefix = "Here is your token: ";
+  const startIndex = text.indexOf(prefix);
+  return startIndex !== -1
+    ? text.slice(startIndex + prefix.length).trim()
+    : null;
+};
+
+const saveTokenToLocalStorage = (token: string) => {
+  localStorage.setItem("token", token);
+};
+
+const registerOrLogin = async (
+  phone: string,
+  name: string
+): Promise<boolean> => {
+  try {
+    // 1) Try register
+    const { data } = await Request("/auth/register", "POST", {
+      firstName: name,
+      lastName: "",
+      birthYear: 0,
+      phoneNumber: phone.trim(),
+      password: phone.trim(),
+    });
+
+    const token = extractToken(data as string);
+    if (token) {
+      saveTokenToLocalStorage(token);
+      return true;
+    } else {
+      console.error("No token found in registration response");
+      return false;
+    }
+  } catch (error) {
+    // 2) If 400 → user already exists, try login
+    if (axios.isAxiosError(error) && error.response?.status === 400) {
+      try {
+        const { data } = await Request("/auth/login", "POST", {
+          phoneNumber: phone.trim(),
+          password: phone.trim(),
+        });
+
+        const token = extractToken(data as string);
+        if (token) {
+          saveTokenToLocalStorage(token);
+          return true;
+        } else {
+          console.error("No token found in login response");
+          return false;
+        }
+      } catch (loginError) {
+        console.error("Login error:", loginError);
+        return false;
+      }
+    } else {
+      console.error("Registration error:", error);
+      return false;
+    }
+  }
+};
+
 const Cart = () => {
   const { totalPrice, cart, clearCart } = useCartStore();
   const { user } = useUser();
+
   const isMobile = useMediaQuery("(max-width: 639px)");
   const { phoneNumber, setSelectedPhone, shopName, setSelectedShopName } =
     useStore();
@@ -46,6 +119,10 @@ const Cart = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  // ✅ NEW – router hooks
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // Memoized calculations
   const totalWithDelivery = useMemo(() => {
     return totalPrice || 0;
@@ -55,16 +132,61 @@ const Cart = () => {
     return PHONE_REGEX.test(phoneNumber) && shopName.trim().length > 0;
   }, [phoneNumber, shopName]);
 
+  // ✅ NEW – if we came back from login with saved data, restore it
+  useEffect(() => {
+    const state = location.state as
+      | {
+          pendingOrder?: { phoneNumber?: string; shopName?: string };
+        }
+      | null
+      | undefined;
+
+    if (state?.pendingOrder) {
+      const { phoneNumber: pn, shopName: sn } = state.pendingOrder;
+      if (pn) setSelectedPhone(pn);
+      if (sn) setSelectedShopName(sn);
+
+      navigate(location.pathname, { replace: true });
+      sessionStorage.removeItem(PENDING_ORDER_KEY);
+      return;
+    }
+
+    // 2) Fallback: check sessionStorage (in case of refresh)
+    const stored = sessionStorage.getItem(PENDING_ORDER_KEY);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as {
+          phoneNumber?: string;
+          shopName?: string;
+        };
+        if (parsed.phoneNumber) setSelectedPhone(parsed.phoneNumber);
+        if (parsed.shopName) setSelectedShopName(parsed.shopName);
+      } catch (e) {
+        console.error("Error parsing pending order from storage", e);
+      }
+    }
+  }, [
+    location.state,
+    location.pathname,
+    navigate,
+    setSelectedPhone,
+    setSelectedShopName,
+  ]);
+
   // Initialize user data when user changes
   useEffect(() => {
+    const hasPendingOrder = !!sessionStorage.getItem(PENDING_ORDER_KEY);
+
+    if (hasPendingOrder) return;
+
     if (user) {
       const trimmedPhone = user.phoneNumber?.trim();
       const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
 
-      if (trimmedPhone) setSelectedPhone(trimmedPhone);
-      if (fullName) setSelectedShopName(fullName);
+      if (trimmedPhone && !phoneNumber) setSelectedPhone(trimmedPhone);
+      if (fullName && !shopName) setSelectedShopName(fullName);
     }
-  }, [user, setSelectedPhone, setSelectedShopName]);
+  }, [user, setSelectedPhone, setSelectedShopName, phoneNumber, shopName]);
 
   // Reset ordered state on component unmount
   useEffect(() => {
@@ -92,18 +214,18 @@ const Cart = () => {
     return "";
   }, []);
 
-  // Handle checkout modal
+  // Handle checkout modal (mobile)
   const handleCheckout = useCallback(() => {
-    if (!user) {
-      toast.error("Iltimos sotib olish uchun ro'yhatdan o'ting");
-      return;
-    }
     setCheckoutModal(true);
-  }, [user]);
+  }, [setCheckoutModal]);
 
-  // Handle phone input change
+  // Handle phone input change / focus
   const handlePhoneChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.FocusEvent<HTMLInputElement>
+    ) => {
       let value = e.target.value.replace(/\D/g, "");
 
       // Ensure it starts with 998
@@ -139,7 +261,23 @@ const Cart = () => {
     [setSelectedShopName, validateShopName]
   );
 
-  // Handle purchase
+  // Handle clear cart with confirmation
+  const handleClearCart = useCallback(() => {
+    if (cart.length === 0) return;
+
+    if (
+      window.confirm("Haqiqatan ham barcha mahsulotlarni o'chirmoqchimisiz?")
+    ) {
+      clearCart();
+    }
+  }, [cart.length, clearCart]);
+
+  // Close checkout modal
+  const closeCheckoutModal = useCallback(() => {
+    setCheckoutModal(false);
+  }, []);
+
+  // Handle purchase (desktop "Sotib olish" button)
   const handleBuy = useCallback(async () => {
     // Validate all fields
     const newErrors: OrderErrors = {
@@ -160,8 +298,18 @@ const Cart = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
-      setLoading(true);
+      // ✅ If user is NOT logged in -> auto register/login then continue order
+      if (!user) {
+        const success = await registerOrLogin(phoneNumber, shopName.trim());
+
+        if (!success) {
+          toast.error("Avval ro'yhatdan o'tish kerak.");
+          return;
+        }
+      }
 
       const orderData: OrderData = {
         products: cart.map((item) => ({
@@ -174,7 +322,12 @@ const Cart = () => {
 
       await Request("/orders", "POST", orderData, true);
 
+      // clear pending saved data (if existed)
+      sessionStorage.removeItem(PENDING_ORDER_KEY);
+
       clearCart();
+      setSelectedPhone("");
+      setSelectedShopName("");
       setOrdered(true);
       setCheckoutModal(false);
       toast.success("Buyurtma muvaffaqiyatli yuborildi!");
@@ -184,23 +337,17 @@ const Cart = () => {
     } finally {
       setLoading(false);
     }
-  }, [phoneNumber, shopName, cart, clearCart, validatePhone, validateShopName]);
-
-  // Handle clear cart with confirmation
-  const handleClearCart = useCallback(() => {
-    if (cart.length === 0) return;
-
-    if (
-      window.confirm("Haqiqatan ham barcha mahsulotlarni o'chirmoqchimisiz?")
-    ) {
-      clearCart();
-    }
-  }, [cart.length, clearCart]);
-
-  // Close checkout modal
-  const closeCheckoutModal = useCallback(() => {
-    setCheckoutModal(false);
-  }, []);
+  }, [
+    phoneNumber,
+    shopName,
+    cart,
+    clearCart,
+    validatePhone,
+    validateShopName,
+    user,
+    setSelectedPhone,
+    setSelectedShopName,
+  ]);
 
   // Early return for completed order or empty cart
   if (cart.length === 0 && ordered) {
@@ -296,6 +443,7 @@ const Cart = () => {
                     <Input
                       value={phoneNumber}
                       onChange={handlePhoneChange}
+                      onFocus={handlePhoneChange}
                       placeholder="+998"
                       className="py-6 bg-[#F1F2F4] placeholder-[#212121] border-0 rounded-[10px] pl-6 placeholder:text-base focus-visible:ring-2 focus-visible:ring-blue-500"
                       aria-label="Telefon raqam"

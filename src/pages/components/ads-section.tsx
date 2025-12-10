@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -24,18 +25,13 @@ const AdsSection = () => {
     setLoading(true);
     setError(null);
     try {
-      // If your Request helper supports an options param, pass { signal }.
-      // Otherwise, it will be ignored — AbortController still protects native fetches.
       const { data } = await Request<BookWithType[]>(
         "/products/by-type",
         "GET",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { signal } as any,
-        true
+        { signal } as any
       );
 
       setBooks(Array.isArray(data) ? data : []);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err?.name === "AbortError") return; // unmounted or aborted
       console.error("Failed to fetch books:", err);
@@ -77,14 +73,17 @@ const AdsSection = () => {
   // const popularProduct: Product | undefined = popularType?.products?.[FIRST];
 
   const getRandomProduct = (products?: Product[]) => {
-  if (!products || products.length === 0) return undefined;
-  const randomIndex = Math.floor(Math.random() * products.length);
-  return products[randomIndex];
-};
+    if (!products || products.length === 0) return undefined;
+    const randomIndex = Math.floor(Math.random() * products.length);
+    return products[randomIndex];
+  };
 
-const bestsellerProduct: Product | undefined = getRandomProduct(bestsellerType?.products);
-const popularProduct: Product | undefined = getRandomProduct(popularType?.products);
-
+  const bestsellerProduct: Product | undefined = getRandomProduct(
+    bestsellerType?.products
+  );
+  const popularProduct: Product | undefined = getRandomProduct(
+    popularType?.products
+  );
 
   const handleNavigate = (typeId?: string, typeName?: string) => {
     if (!typeId || !typeName) return;

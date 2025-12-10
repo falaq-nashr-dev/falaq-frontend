@@ -122,8 +122,8 @@ const AllProducts = () => {
           )}
 
           {products.map((book) => (
-            // <Product key={book.id} book={book} />
             <NewCard
+              quantity={book.quantity}
               key={book.id}
               id={book.id}
               imageUrl={getImage(book.photo?.prefix, book.photo?.name)}

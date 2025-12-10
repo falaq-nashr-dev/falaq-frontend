@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../../../public/images/signup.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // ✅ useLocation added
 import { Request } from "../../helpers/Request";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,9 @@ const StartPage = () => {
   const [nameError, setNameError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ get state from router
 
   const extractToken = (text: string) => {
     const prefix = "Here is your token: ";
@@ -25,6 +27,27 @@ const StartPage = () => {
     return startIndex !== -1
       ? text.slice(startIndex + prefix.length).trim()
       : null;
+  };
+
+  // ✅ Helper: after successful auth, decide where to go
+  const redirectAfterAuth = (token: string) => {
+    localStorage.setItem("token", token);
+
+    const state = location.state as
+      | {
+          from?: string;
+          pendingOrder?: { phoneNumber?: string; shopName?: string };
+        }
+      | undefined
+      | null;
+
+    const from = state?.from || "/"; // default home
+    const pendingOrder = state?.pendingOrder;
+
+    navigate(from, {
+      replace: true,
+      state: pendingOrder ? { pendingOrder } : undefined,
+    });
   };
 
   const handleRegister = async () => {
@@ -42,8 +65,8 @@ const StartPage = () => {
 
       const token = extractToken(data as string);
       if (token) {
-        localStorage.setItem("token", token);
-        navigate("/");
+        // ✅ use redirect helper instead of navigate("/")
+        redirectAfterAuth(token);
       } else {
         console.error("No token found in response");
       }
@@ -54,10 +77,11 @@ const StartPage = () => {
           phoneNumber: phone.trim(),
           password: phone.trim(),
         });
+
         const token = extractToken(data as string);
         if (token) {
-          localStorage.setItem("token", token);
-          navigate("/");
+          // ✅ use redirect helper here too
+          redirectAfterAuth(token);
         }
       } else {
         console.error("Registration error:", error);

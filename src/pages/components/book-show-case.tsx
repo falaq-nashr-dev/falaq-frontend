@@ -182,8 +182,7 @@ const BookShowcaseSection: React.FC = () => {
       const { data } = await Request<BookWithType[]>(
         "/products/by-type",
         "GET",
-        {},
-        true
+        {}
       );
       setBooks(Array.isArray(data) ? data : []);
     } catch (err: unknown) {

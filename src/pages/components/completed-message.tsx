@@ -15,7 +15,7 @@ const CompletedMessage = () => {
         chiqadi
       </p>
       <Button
-        onClick={() => navigate("/main")}
+        onClick={() => navigate("/")}
         className="max-w-[358px] h-[48px] mt-6 w-full bg-[#007AFF] hover:bg-[#007bffe7] rounded-xl"
       >
         Bosh sahifaga qaytish

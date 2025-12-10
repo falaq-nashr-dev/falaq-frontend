@@ -17,10 +17,18 @@ interface NewCardProps {
   title: string;
   price: number;
   imageUrl: string;
+  quantity: number;
   addToCart: () => void;
 }
 
-const NewCard = ({ imageUrl, price, title, id, addToCart }: NewCardProps) => {
+const NewCard = ({
+  imageUrl,
+  price,
+  title,
+  id,
+  quantity,
+  addToCart,
+}: NewCardProps) => {
   const navigate = useNavigate();
 
   const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -37,6 +45,7 @@ const NewCard = ({ imageUrl, price, title, id, addToCart }: NewCardProps) => {
           {/* Image area */}
           <div className="rounded-xl sm:rounded-3xl bg-[#F7F7F7] h-[200px] xs:h-[240px] sm:!h-[300px] flex items-center justify-center">
             <img
+              loading="lazy"
               src={imageUrl}
               alt={title}
               className="h-40 xs:h-48 sm:h-52 md:h-60 lg:!h-64 object-contain rounded-lg sm:rounded-xl drop-shadow-sm"
@@ -57,10 +66,11 @@ const NewCard = ({ imageUrl, price, title, id, addToCart }: NewCardProps) => {
 
           {/* add to cart button */}
           <button
+            disabled={quantity <= 0}
             onClick={handleAdd}
-            className="mt-5 sm:mt-6 w-full rounded-2xl bg-[#348AEC]/15 text-[#348AEC] text-base font-medium h-[46px] transition-colors hover:bg-blue-200/75"
+            className={`mt-5 sm:mt-6 w-full rounded-2xl bg-[#348AEC]/15 text-[#348AEC] text-base font-medium h-[46px] disabled:bg-orange-500/15 disabled:text-orange-500 transition-colors hover:bg-blue-200/75`}
           >
-            Savatga qo'shish
+            {quantity <= 0 ? "Sotuvda qolmadi" : "Savatga qo'shish"}
           </button>
         </div>
       </div>

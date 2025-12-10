@@ -78,7 +78,7 @@ const BooksForm = () => {
       salePrice === 0 ||
       description === "" ||
       about === "" ||
-      stockCount === 0 ||
+      stockCount < 0 ||
       (!editingId && !image)
     ) {
       toast.error("Iltimos to'liq ma'lumotlarni kiriting.");

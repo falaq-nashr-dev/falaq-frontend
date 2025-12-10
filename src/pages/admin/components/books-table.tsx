@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AdminBooks } from "../../../types";
 import toast from "react-hot-toast";
 
-import { ImageViewer } from "react-image-viewer-dv";
 import { getImage } from "../../../helpers/image";
 import { MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -149,18 +148,16 @@ const BooksTable = () => {
                 {ind + 1}
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
-                <ImageViewer>
-                  <img
-                    width={30}
-                    src={
-                      book.photo
-                        ? getImage(book.photo.prefix, book.photo.name)
-                        : "/new.png"
-                    }
-                    alt="book cover"
-                    className=" rounded"
-                  />
-                </ImageViewer>
+                <img
+                  width={30}
+                  src={
+                    book.photo
+                      ? getImage(book.photo.prefix, book.photo.name)
+                      : "/new.png"
+                  }
+                  alt="book cover"
+                  className=" rounded"
+                />
               </td>
               <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">
                 {book.name}

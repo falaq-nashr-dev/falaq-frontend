@@ -30,14 +30,15 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import BookDemo from "./components/book-demo";
 import { CgSpinner } from "react-icons/cg";
 import NavNavigate from "@/components/nav-navigate";
+import useUser from "@/hooks/use-user";
 
 const ProductDetail = () => {
   const { addToCart } = useCartStore();
+  const { user } = useUser();
   const isMobile = useMediaQuery("(max-width: 500px)");
 
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
-  // console.log(loading);
 
   // modal states
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -72,8 +73,7 @@ const ProductDetail = () => {
       const { data } = await Request<AdminBooks>(
         `/products/${params.id}`,
         "GET",
-        {},
-        true
+        {}
       );
 
       if (!data) {
@@ -96,8 +96,7 @@ const ProductDetail = () => {
       const { data } = await Request<Review[]>(
         `/product-rating/product/${params.id}`,
         "GET",
-        {},
-        true
+        {}
       );
       setReviews(data);
     } catch (error) {
@@ -244,7 +243,7 @@ const ProductDetail = () => {
                 </div>
               </div>
               <div className="border border-dashed border-[#AAAAAA] mt-4"></div>
-              <div className="mt-4 bg-white sm:bg-transparent sticky sm:static bottom-[5.6rem] flex-col xs:flex-row flex items-center justify-between py-2 sm:py-0">
+              <div className="mt-4 bg-white xs:bg-transparent sticky sm:static bottom-[5.58rem] flex-col xs:flex-row flex items-center justify-between py-2 sm:py-0">
                 <h2 className="font-bold text-[#11142D] text-[25px] sm:text-[36px]">
                   {currentProduct?.salePrice?.toLocaleString()} UZS
                 </h2>
@@ -306,7 +305,16 @@ const ProductDetail = () => {
                 <ChevronRight size={18} className="text-gray-500" />
               </div>
               <Button
-                onClick={() => setReviewOpen(true)}
+                onClick={() => {
+                  if (!user) {
+                    toast.error(
+                      "Iltimos, sharh qoldirish uchun tizimga kiring"
+                    );
+                    navigate("/start");
+                    return;
+                  }
+                  setReviewOpen(true);
+                }}
                 className="w-[100px] h-[20px] xs:w-[174px] xs:h-[36px] bg-[#207BBE] hover:bg-[#207cbed2] text-white font-medium text-xs xs:text-base active:scale-105 transition-all duration-300 rounded-[8px] py-4"
               >
                 Sharx qoldirish
@@ -334,7 +342,16 @@ const ProductDetail = () => {
                 Mijozlarning sharhlari
               </h1>
               <Button
-                onClick={() => setReviewOpen(true)}
+                onClick={() => {
+                  if (!user) {
+                    toast.error(
+                      "Iltimos, sharh qoldirish uchun tizimga kiring"
+                    );
+                    navigate("/start");
+                    return;
+                  }
+                  setReviewOpen(true);
+                }}
                 className="w-[140px] h-[34px] xs:w-[174px] xs:h-[36px] bg-[#207BBE] hover:bg-[#207cbed2] text-white font-medium text-sm xs:text-base active:scale-105 transition-all duration-300 rounded-[12px] py-5"
               >
                 Sharx qoldirish

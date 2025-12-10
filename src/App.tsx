@@ -56,16 +56,7 @@ const App = () => {
 
   // Memoize the static array to prevent unnecessary re-renders
   const userPages = useMemo(
-    () => [
-      "/",
-      "/cart",
-      "/main-order",
-      "/profile",
-      "/product/*",
-      "/profile/settings",
-      "/all-products",
-      "/main",
-    ],
+    () => ["/main-order", "/profile", "/profile/settings"],
     []
   );
 

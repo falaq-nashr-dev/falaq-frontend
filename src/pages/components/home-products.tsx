@@ -19,12 +19,7 @@ const HomeProducts = () => {
     try {
       setLoading(true);
       setError(null);
-      const { data } = await Request<AdminBooks[]>(
-        endpoint,
-        "GET",
-        undefined,
-        true
-      );
+      const { data } = await Request<AdminBooks[]>(endpoint, "GET", undefined);
       setProducts(data);
     } catch (err) {
       console.error(err);
@@ -62,6 +57,7 @@ const HomeProducts = () => {
           {products.map((book) => (
             // <Product key={book.id} book={book} />
             <NewCard
+              quantity={book.quantity}
               key={book.id}
               id={book.id}
               imageUrl={getImage(book.photo?.prefix, book.photo?.name)}
